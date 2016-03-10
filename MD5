@@ -1,0 +1,15 @@
+75618775190f4a46f68e61baca8147ff *DESCRIPTION
+91443a13b3d89ea22bfa1222461b0111 *LICENSE
+b0a444d18f982bed3590fc7ab490f790 *NAMESPACE
+2e3be21509d6f60f019d2b1ca373628a *R/RcppExports.R
+185f59256b9f7a26f864dc6258a8b9aa *R/hunspell.R
+391edaaca4b9dcc10fa35abaca50671b *configure
+011cfe10c5b45588bde7632a8599fee5 *inst/dict/en_US/README.txt
+c440369e0b75fea17c4e065999dcfadd *inst/dict/en_US/en_US.aff
+15582ca5c695ee48915d85e0c8578f27 *inst/dict/en_US/en_US.dic
+5c9a1033e1b11bef1546a079c9a9e0ad *man/hunspell.Rd
+111e1efb50ff675feb507ea42a24b300 *src/Makevars.in
+ccc5244b35b3d606e5b5cc04509bc705 *src/Makevars.win
+efc01d2d13eaf0c515e6f06ec7649d42 *src/RcppExports.cpp
+d41dfaccec7927fe62a6e09169f5e2d8 *src/bindings.cpp
+e7773356973fc5bda754f2b368d4938f *tools/winlibs.R
