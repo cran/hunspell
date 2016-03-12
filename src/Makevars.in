@@ -1,2 +1,15 @@
-PKG_CPPFLAGS=@cflags@
-PKG_LIBS=@libs@
+PKG_CPPFLAGS=-Iparsers @cflags@
+PKG_LIBS=-L. -lparsers @libs@
+
+# Bundled hunspell parsers
+PARSERS=parsers/textparser.o parsers/latexparser.o parsers/manparser.o
+
+all: clean libparsers.a
+
+libparsers.a: $(PARSERS)
+	$(AR) rcs libparsers.a $(PARSERS)
+
+clean:
+	rm -f hunspell.so libparsers.a $(PARSERS) $(OBJECTS)
+
+.PHONY: all clean

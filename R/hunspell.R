@@ -1,10 +1,10 @@
 #' Hunspell Spell Checking
 #'
-#' Various tools for spell checking. The \code{\link{hunspell_check}} function
-#' takes a vector of words and tests each individual word for correctness. The
-#' \code{\link{hunspell_find}} function takes a character vector with text
-#' (sentences) and returns only incorrect words. Finally \code{\link{hunspell_suggest}}
-#' is used to suggest correct words for each (incorrect) input word.
+#' The \code{\link{hunspell_check}} function takes a vector of words and checks
+#' each individual word for correctness. The \code{\link{hunspell_find}} function
+#' takes a character vector with text (in plain, latex or man format) and returns
+#' a list with incorrect words for each line. Finally \code{\link{hunspell_suggest}}
+#' is used to suggest correct alternatives for each (incorrect) input word.
 #'
 #' The functions \code{\link{hunspell_analyze}} and \code{\link{hunspell_stem}}
 #' try to break down a word and return it's structure or stem word(s).
@@ -17,10 +17,10 @@
 #' @rdname hunspell
 #' @aliases hunspell
 #' @param words character vector with individual words to spellcheck
-#' @param text character vector with arbitrary length text
-#' @param ignore character vector with additional approved words dictionary
-#' @param lang which dictionary to use. Currently only \code{en_US} is supported
-#' @param delim string with characters used to deliminate words
+#' @param text character vector with arbitrary input text
+#' @param ignore character vector with additional approved words for the dictionary
+#' @param format input format; supported parsers are \code{text}, \code{latex} or \code{man}
+#' @param lang dictionary language; currently only \code{en_US} is supported
 #' @rdname hunspell
 #' @importFrom Rcpp sourceCpp
 #' @useDynLib hunspell
@@ -35,8 +35,17 @@
 #'
 #' # find incorrect words in piece of text
 #' bad <- hunspell_find("spell checkers are not neccessairy for langauge ninja's")
-#' print(bad)
-#' hunspell_suggest(bad)
+#' print(bad[[1]])
+#' hunspell_suggest(bad[[1]])
+#'
+#' \dontrun{
+#' # check a latex document
+#' download.file("http://arxiv.org/e-print/1406.4806v1", "1406.4806v1.tar.gz",  mode = "wb")
+#' untar("1406.4806v1.tar.gz")
+#' text <- readLines("content.tex", warn = FALSE)
+#' words <- hunspell_find(text, format = "latex")
+#' sort(unique(unlist(words)))
+#' }
 hunspell_check <- function(words, ignore = character(), lang = "en_US"){
   stopifnot(is.character(words))
   stopifnot(is.character(ignore))
@@ -45,10 +54,11 @@ hunspell_check <- function(words, ignore = character(), lang = "en_US"){
 
 #' @rdname hunspell
 #' @export
-hunspell_find <- function(text, ignore = character(), delim = " .!?:;,.",  lang = "en_US"){
+hunspell_find <- function(text, ignore = character(), format = c("text", "man", "latex"),  lang = "en_US"){
   stopifnot(is.character(text))
   stopifnot(is.character(ignore))
-  R_hunspell_find(get_affix(lang), get_dict(lang), text, ignore, delim)
+  format <- match.arg(format)
+  R_hunspell_find(get_affix(lang), get_dict(lang), text, ignore, format)
 }
 
 #' @rdname hunspell

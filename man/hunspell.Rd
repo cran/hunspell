@@ -11,8 +11,8 @@
 \usage{
 hunspell_check(words, ignore = character(), lang = "en_US")
 
-hunspell_find(text, ignore = character(), delim = " .!?:;,.",
-  lang = "en_US")
+hunspell_find(text, ignore = character(), format = c("text", "man",
+  "latex"), lang = "en_US")
 
 hunspell_suggest(words, lang = "en_US")
 
@@ -23,20 +23,20 @@ hunspell_stem(words, lang = "en_US")
 \arguments{
 \item{words}{character vector with individual words to spellcheck}
 
-\item{ignore}{character vector with additional approved words dictionary}
+\item{ignore}{character vector with additional approved words for the dictionary}
 
-\item{lang}{which dictionary to use. Currently only \code{en_US} is supported}
+\item{lang}{dictionary language; currently only \code{en_US} is supported}
 
-\item{text}{character vector with arbitrary length text}
+\item{text}{character vector with arbitrary input text}
 
-\item{delim}{string with characters used to deliminate words}
+\item{format}{input format; supported parsers are \code{text}, \code{latex} or \code{man}}
 }
 \description{
-Various tools for spell checking. The \code{\link{hunspell_check}} function
-takes a vector of words and tests each individual word for correctness. The
-\code{\link{hunspell_find}} function takes a character vector with text
-(sentences) and returns only incorrect words. Finally \code{\link{hunspell_suggest}}
-is used to suggest correct words for each (incorrect) input word.
+The \code{\link{hunspell_check}} function takes a vector of words and checks
+each individual word for correctness. The \code{\link{hunspell_find}} function
+takes a character vector with text (in plain, latex or man format) and returns
+a list with incorrect words for each line. Finally \code{\link{hunspell_suggest}}
+is used to suggest correct alternatives for each (incorrect) input word.
 }
 \details{
 The functions \code{\link{hunspell_analyze}} and \code{\link{hunspell_stem}}
@@ -58,7 +58,16 @@ hunspell_suggest(words[!correct])
 
 # find incorrect words in piece of text
 bad <- hunspell_find("spell checkers are not neccessairy for langauge ninja's")
-print(bad)
-hunspell_suggest(bad)
+print(bad[[1]])
+hunspell_suggest(bad[[1]])
+
+\dontrun{
+# check a latex document
+download.file("http://arxiv.org/e-print/1406.4806v1", "1406.4806v1.tar.gz",  mode = "wb")
+untar("1406.4806v1.tar.gz")
+text <- readLines("content.tex", warn = FALSE)
+words <- hunspell_find(text, format = "latex")
+sort(unique(unlist(words)))
+}
 }
 
