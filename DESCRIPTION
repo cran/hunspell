@@ -1,7 +1,7 @@
 Package: hunspell
 Type: Package
-Title: Spell Checker and Text Parser for R
-Version: 1.1
+Title: Morphological Analysis and Spell Checker for R
+Version: 1.2
 Author: Jeroen Ooms
 Maintainer: Jeroen Ooms <jeroen.ooms@stat.ucla.edu>
 Description: A spell checker and morphological analyzer library designed for
@@ -14,8 +14,9 @@ BugReports: https://github.com/jeroenooms/hunspell/issues
 SystemRequirements: Hunspell library and headers
 Imports: Rcpp
 LinkingTo: Rcpp
+Suggests: testthat
 RoxygenNote: 5.0.1
 NeedsCompilation: yes
-Packaged: 2016-03-12 13:02:27 UTC; jeroen
+Packaged: 2016-03-19 19:43:28 UTC; jeroen
 Repository: CRAN
-Date/Publication: 2016-03-12 16:15:46
+Date/Publication: 2016-03-19 23:01:11

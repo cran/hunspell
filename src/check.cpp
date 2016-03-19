@@ -1,104 +1,68 @@
-#include <hunspell.hxx>
-#include <Rcpp.h>
+#include "utils.h"
 
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-LogicalVector R_hunspell_check(std::string affix, CharacterVector dict, CharacterVector words, CharacterVector ignore){
+List R_hunspell_info(std::string affix, std::string dict){
 
   //init with affix and at least one dict
-  Hunspell * pMS = new Hunspell(affix.c_str(), dict[0]);
+  hunspell_dict mydict(affix, dict);
+  return List::create(
+    _["dict"] = dict,
+    _["encoding"] = CharacterVector(mydict.enc()),
+    _["wordchars"] = mydict.string_to_r(mydict.wc())
+  );
+}
 
-  //add additional dictionaries if more than one
-  for(int i = 1; i < dict.length(); i++){
-    pMS->add_dic(dict[i]);
-  }
+// [[Rcpp::export]]
+LogicalVector R_hunspell_check(std::string affix, std::string dict, StringVector words){
 
-  //add ignore words
-  for(int i = 0; i < ignore.length(); i++){
-    pMS->add(ignore[i]);
-  }
+  //init with affix and at least one dict
+  hunspell_dict mydict(affix, dict);
 
   //check all words
   LogicalVector out;
-  for(int i = 0; i < words.length(); i++){
-    out.push_back(pMS->spell(words[i]));
-  }
-  delete pMS;
+  for(int i = 0; i < words.length(); i++)
+    out.push_back(mydict.spell(words[i]));
+
   return out;
 }
 
 // [[Rcpp::export]]
-List R_hunspell_suggest(std::string affix, CharacterVector dict, CharacterVector words){
+List R_hunspell_suggest(std::string affix, std::string dict, StringVector words){
 
   //init with affix and at least one dict
-  Hunspell * pMS = new Hunspell(affix.c_str(), dict[0]);
-
-  //add additional dictionaries if more than one
-  for(int i = 1; i < dict.length(); i++){
-    pMS->add_dic(dict[i]);
-  }
+  hunspell_dict mydict(affix, dict);
 
   List out;
-  char ** wlst;
-  for(int i = 0; i < words.length(); i++){
-    CharacterVector suggestions;
-    int ns = pMS->suggest(&wlst, words[i]);
-    for (int j = 0; j < ns; j++)
-      suggestions.push_back(wlst[j]);
-    pMS->free_list(&wlst, ns);
-    out.push_back(suggestions);
-  }
-  delete pMS;
+  for(int i = 0; i < words.length(); i++)
+    out.push_back(mydict.suggest(words[i]));
+
   return out;
 }
 
 // [[Rcpp::export]]
-List R_hunspell_analyze(std::string affix, CharacterVector dict, CharacterVector words){
+List R_hunspell_analyze(std::string affix, std::string dict, StringVector words){
 
   //init with affix and at least one dict
-  Hunspell * pMS = new Hunspell(affix.c_str(), dict[0]);
-
-  //add additional dictionaries if more than one
-  for(int i = 1; i < dict.length(); i++){
-    pMS->add_dic(dict[i]);
-  }
+  hunspell_dict mydict(affix, dict);
 
   List out;
-  char ** wlst;
-  for(int i = 0; i < words.length(); i++){
-    CharacterVector pieces;
-    int ns = pMS->analyze(&wlst, words[i]);
-    for (int j = 0; j < ns; j++)
-      pieces.push_back(wlst[j]);
-    pMS->free_list(&wlst, ns);
-    out.push_back(pieces);
-  }
-  delete pMS;
+  for(int i = 0; i < words.length(); i++)
+    out.push_back(mydict.analyze(words[i]));
+
   return out;
 }
 
 // [[Rcpp::export]]
-List R_hunspell_stem(std::string affix, CharacterVector dict, CharacterVector words){
+List R_hunspell_stem(std::string affix, std::string dict, StringVector words){
 
   //init with affix and at least one dict
-  Hunspell * pMS = new Hunspell(affix.c_str(), dict[0]);
-
-  //add additional dictionaries if more than one
-  for(int i = 1; i < dict.length(); i++){
-    pMS->add_dic(dict[i]);
-  }
+  hunspell_dict mydict(affix, dict);
 
   List out;
-  char ** wlst;
-  for(int i = 0; i < words.length(); i++){
-    CharacterVector pieces;
-    int ns = pMS->stem(&wlst, words[i]);
-    for (int j = 0; j < ns; j++)
-      pieces.push_back(wlst[j]);
-    pMS->free_list(&wlst, ns);
-    out.push_back(pieces);
-  }
-  delete pMS;
+  for(int i = 0; i < words.length(); i++)
+    out.push_back(mydict.stem(words[i]));
+
   return out;
 }

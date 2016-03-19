@@ -1,60 +1,114 @@
-#include <hunspell.hxx>
-#include <Rcpp.h>
-
 #include "parsers/textparser.hxx"
 #include "parsers/latexparser.hxx"
 #include "parsers/manparser.hxx"
 
+#include "utils.h"
+
 using namespace Rcpp;
 
-// [[Rcpp::export]]
-List R_hunspell_find(std::string affix, CharacterVector dict, CharacterVector text,
-                                CharacterVector ignore, std::string format){
+class hunspell_parser {
+  TextParser *parser;
+  hunspell_dict *mydict;
+  unsigned short * utf16_wc;
+  int utf16_len;
 
-  //init with affix and at least one dict
-  Hunspell * pMS = new Hunspell(affix.c_str(), dict[0]);
-
-  //int wordchars_utf16_len;
-  //unsigned short * wordchars_utf16 = pMS->get_wordchars_utf16(&wordchars_utf16_len); //utf8
-  //TextParser *p = new TextParser(wordchars_utf16, wordchars_utf16_len);
-
-  //find valid characters in this language
-  const char * wordchars = pMS->get_wordchars(); //latin1
-  TextParser * p = NULL;
-  if(!format.compare("text")){
-    p = new TextParser(wordchars);
-  } else if(!format.compare("latex")){
-    p = new LaTeXParser(wordchars);
-  } else if(!format.compare("man")){
-    p = new ManParser(wordchars);
-  } else {
-    throw std::runtime_error("Unknown parse format");
+public:
+  hunspell_parser(hunspell_dict *mydict, std::string format) : mydict(mydict) {
+    utf16_wc = mydict->get_wordchars_utf16(&utf16_len);
+    if(strcmp(mydict->enc(), "UTF-8") == 0){
+      if(!format.compare("text")){
+        parser = new TextParser(utf16_wc, utf16_len);
+      } else if(!format.compare("latex")){
+        parser = new LaTeXParser(utf16_wc, utf16_len);
+      } else if(!format.compare("man")){
+        parser = new ManParser(utf16_wc, utf16_len);
+      } else {
+        throw std::runtime_error("Unknown parse format");
+      }
+    } else {
+      // 8bit encodings, e.g. latin1 or similar
+      if(!format.compare("text")){
+        parser = new TextParser(mydict->wc());
+      } else if(!format.compare("latex")){
+        parser = new LaTeXParser(mydict->wc());
+      } else if(!format.compare("man")){
+        parser = new ManParser(mydict->wc());
+      } else {
+        throw std::runtime_error("Unknown parse format");
+      }
+    }
   }
 
-  //add additional dictionaries if more than one
-  for(int i = 1; i < dict.length(); i++){
-    pMS->add_dic(dict[i]);
+  ~hunspell_parser() {
+    try {
+      delete parser;
+    } catch (...) {}
   }
 
-  //add ignore words
-  for(int i = 0; i < ignore.length(); i++){
-    pMS->add(ignore[i]);
-  }
-
-  List out;
-  char * token;
-  for(int i = 0; i < text.length(); i++){
-    CharacterVector words;
-    p->put_line(text[i]);
-    p->set_url_checking(1);
-    while ((token=p->next_token())) {
-      if(!pMS->spell(token))
-        words.push_back(token);
+  CharacterVector parse(String txt){
+    char * token;
+    CharacterVector output;
+    txt.set_encoding(CE_UTF8);
+    parser->put_line((char*) txt.get_cstring());
+    parser->set_url_checking(1);
+    while ((token=parser->next_token())) {
+      String x(token);
+      x.set_encoding(CE_UTF8);
+      output.push_back(x);
       free(token);
     }
-    out.push_back(words);
+    return output;
   }
-  delete p;
-  delete pMS;
+
+  CharacterVector check(String txt, int i){
+    CharacterVector words;
+    char * token;
+    char * str = mydict->string_from_r(txt);
+    if(str == NULL){
+      Rf_warningcall(R_NilValue, "Failed to convert line %d to %s encoding. Cannot spell check with this dictionary. Try using a UTF8 dictionary.", i + 1, mydict->enc());
+    } else {
+      parser->put_line(str);
+      parser->set_url_checking(1);
+      while ((token=parser->next_token())) {
+        if(!mydict->spell_char(token))
+          words.push_back(mydict->string_to_r(token));
+        free(token);
+      }
+      free(str);
+    }
+    return words;
+  }
+};
+
+// [[Rcpp::export]]
+List R_hunspell_find(std::string affix, std::string dict, StringVector text,
+                     std::string format, StringVector ignore){
+
+  //init with affix and at least one dict
+  hunspell_dict mydict(affix, dict);
+  hunspell_parser p(&mydict, format);
+
+  //add ignore words
+  mydict.add_words(ignore);
+
+  List out;
+  for(int i = 0; i < text.length(); i++)
+    out.push_back(p.check(text[i], i));
+
+  return out;
+}
+
+// [[Rcpp::export]]
+List R_hunspell_parse(std::string affix, std::string dict, StringVector text,
+                     std::string format){
+
+  //init with affix and at least one dict
+  hunspell_dict mydict(affix, dict);
+  hunspell_parser p(&mydict, format);
+
+  List out;
+  for(int i = 0; i < text.length(); i++)
+    out.push_back(p.parse(text[i]));
+
   return out;
 }
