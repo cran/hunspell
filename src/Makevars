@@ -1,0 +1,25 @@
+PKG_CPPFLAGS=-I. -Ihunspell
+PKG_CXXFLAGS=-DHAVE_CONFIG_H -DBUILDING_LIBHUNSPELL
+CXX_STD=CXX11
+
+#Add Windows-only flags (ifeq is a GNU extension...)
+WINRICONV=$(subst 64,-lRiconv,$(subst 32,64,$(WIN)))
+PKG_LIBS=-L. -lstathunspell $(WINRICONV)
+
+LIBHUNSPELL=parsers/textparser.o parsers/latexparser.o parsers/manparser.o \
+	parsers/xmlparser.o parsers/htmlparser.o \
+  hunspell/affentry.o hunspell/affixmgr.o hunspell/filemgr.o \
+  hunspell/hashmgr.o hunspell/hunspell.o hunspell/hunzip.o hunspell/phonet.o \
+  hunspell/replist.o hunspell/suggestmgr.o hunspell/csutil.o
+
+## all: clean
+
+$(SHLIB): libstathunspell.a
+
+libstathunspell.a: $(LIBHUNSPELL)
+	$(AR) rcs libstathunspell.a $(LIBHUNSPELL)
+
+clean:
+	rm -f $(SHLIB) $(LIBHUNSPELL) $(OBJECTS) libstathunspell.a
+
+.PHONY: all clean

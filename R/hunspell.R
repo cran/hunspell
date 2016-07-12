@@ -31,18 +31,20 @@
 #' \href{https://packages.debian.org/sid/hunspell-en-gb}{hunspell-en-gb} or
 #' \href{https://packages.debian.org/sid/myspell-en-gb}{myspell-en-gb}.
 #'
-#' To manually install dictionaries, download the \code{.aff} and \code{.dic} file
-#' from an OpenOffice \href{http://ftp.snt.utwente.nl/pub/software/openoffice/contrib/dictionaries/}{mirror}
-#' or \href{http://archive.ubuntu.com/ubuntu/pool/main/libr/libreoffice-dictionaries/?C=S;O=D}{bundle}
-#' and copy them to \code{~/Library/Spelling} or a custom directory specified in \code{DICPATH}.
+#' To manually install dictionaries, copy the corresponding \code{.aff} and \code{.dic}
+#' file to \code{~/Library/Spelling} or a custom directory specified in \code{DICPATH}.
 #' Alternatively you can pass the entire path to the \code{.dic} file as the \code{dict}
-#' parameter.
+#' parameter. Some popular sources of dictionaries are
+#' \href{http://wordlist.aspell.net/dicts/}{SCOWL},
+#' \href{http://ftp.snt.utwente.nl/pub/software/openoffice/contrib/dictionaries/}{OpenOffice},
+#' \href{http://archive.ubuntu.com/ubuntu/pool/main/libr/libreoffice-dictionaries/?C=S;O=D}{debian},
+#' \href{https://github.com/titoBouzout/Dictionaries}{github/titoBouzout} or
+#' \href{https://github.com/wooorm/dictionaries}{github/wooorm}.
 #'
 #' Note that \code{hunspell} uses \code{\link{iconv}} to convert input text to
 #' the encoding used by the dictionary. This will fail if \code{text} contains characters
 #' which are unsupported by that particular encoding. For this reason UTF-8 dictionaries
-#' are preferable over legacy 8bit dictionaries Several UTF8 dictionaries are
-#' available from \href{https://github.com/titoBouzout/Dictionaries}{Github}.
+#' are preferable over legacy 8bit dictionaries.
 #'
 #' @rdname hunspell
 #' @aliases hunspell hunspell_find en_stats dicpath
@@ -50,7 +52,8 @@
 #' @param words character vector with individual words to spell check
 #' @param text character vector with arbitrary input text
 #' @param ignore character vector with additional approved words added to the dictionary
-#' @param format input format; supported parsers are \code{text}, \code{latex} or \code{man}
+#' @param format input format; supported parsers are \code{text}, \code{latex}, \code{man},
+#' \code{xml} and \code{html}.
 #' @param dict dictionary language, see details
 #' @rdname hunspell
 #' @importFrom Rcpp sourceCpp
@@ -86,7 +89,8 @@
 #' allwords <- hunspell_parse(text, format = "latex")
 #' stems <- unlist(hunspell_stem(unlist(allwords)))
 #' words <- head(sort(table(stems), decreasing = TRUE), 200)
-hunspell <- function(text, format = c("text", "man", "latex"), dict = "en_US", ignore = en_stats){
+hunspell <- function(text, format = c("text", "man", "latex", "html", "xml"),
+                     dict = "en_US", ignore = en_stats){
   stopifnot(is.character(text))
   stopifnot(is.character(ignore))
   format <- match.arg(format)
@@ -99,7 +103,7 @@ hunspell_find <- hunspell
 
 #' @rdname hunspell
 #' @export
-hunspell_parse <- function(text, format = c("text", "man", "latex"), dict = "en_US"){
+hunspell_parse <- function(text, format = c("text", "man", "latex", "html", "xml"), dict = "en_US"){
   stopifnot(is.character(text))
   format <- match.arg(format)
   dicpath <- get_dict(dict)
@@ -142,7 +146,16 @@ hunspell_stem <- function(words, dict = "en_US"){
 #' @export
 hunspell_info <- function(dict = "en_US"){
   dicpath <- get_dict(dict)
-  R_hunspell_info(get_affix(dicpath), dicpath)
+  info <- R_hunspell_info(get_affix(dicpath), dicpath)
+  if(length(info$wordchars)){
+    wc_enc <- ifelse(info$encoding == "UTF-8", "UTF-16LE", info$encoding)
+    wc <- iconv(list(info$wordchars), wc_enc, "UTF-8")
+    Encoding(wc) <- "UTF-8"
+    info$wordchars <- wc
+  } else {
+    info$wordchars <- NA_character_
+  }
+  info
 }
 
 get_affix <- function(dicpath){
