@@ -1,8 +1,7 @@
-82372752d5eefa5c05fda70b6e44667b *DESCRIPTION
-91443a13b3d89ea22bfa1222461b0111 *LICENSE
-5159332eeae02f10e818a8a324fd14b3 *LICENSE.note
+bb5bf1de026239b015419ca8737084f6 *DESCRIPTION
+8dbe620f546b5cdf502b8557bac3e02b *LICENSE.note
 4cb525ac37b1412fdc33f7185f88686e *NAMESPACE
-f97e7a727f3de84b9ff553272254a545 *NEWS
+7b9e03b94172d9b4f3c210463ab37f9a *NEWS
 f05ab334040cd85582ba36e28b8a6c3e *R/RcppExports.R
 fdbab41ee83318ae307e1c171eb68719 *R/hunspell.R
 480d7cde04a2bda9b0b96d4904190f74 *README.md
@@ -60,7 +59,7 @@ ae9b1319b85a5921e4cf3422be322075 *src/parsers/odfparser.cc
 772afc20e1245d4b598f2f4e4b9d5313 *src/parsers/textparser.hxx
 032e7ad4ce95592f1f5015c6a8f75715 *src/parsers/xmlparser.cc
 108333b15d0f7f38e289a6544c5f36f4 *src/parsers/xmlparser.hxx
-332a57ccc4547371e04c2f74e1159df2 *src/utils.h
+187229cc4ade2756987740cd2629951a *src/utils.h
 ab477fd3f8e9c98772a3fa2873590ca0 *tests/testdict/ru_RU.aff
 c1de6ed437b9875dae98403e04641bb2 *tests/testdict/ru_RU.dic
 85cd6010f748c90efd86dbe78fbeced4 *tests/testdict/russian-aot.aff
