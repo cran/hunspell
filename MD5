@@ -1,7 +1,7 @@
-bb5bf1de026239b015419ca8737084f6 *DESCRIPTION
+6955ea512c76f3590ef06939d74b032b *DESCRIPTION
 8dbe620f546b5cdf502b8557bac3e02b *LICENSE.note
 4cb525ac37b1412fdc33f7185f88686e *NAMESPACE
-7b9e03b94172d9b4f3c210463ab37f9a *NEWS
+a56d416012111809fd0a085c1a25230b *NEWS
 f05ab334040cd85582ba36e28b8a6c3e *R/RcppExports.R
 fdbab41ee83318ae307e1c171eb68719 *R/hunspell.R
 480d7cde04a2bda9b0b96d4904190f74 *README.md
@@ -12,9 +12,8 @@ db68a47ab1f1159be17daf5f8800d6c6 *inst/dict/en_US.aff
 58913053800419597839117a985874f6 *inst/dict/en_US.dic
 63dc8b6ab768ff78b7ad688be602ff06 *man/hunspell.Rd
 f8abe5c0707e0839bb35d48263523e0e *src/Makevars
-0cc10216c5dc46146e0fb12c4eb4475f *src/RcppExports.cpp
-b0e2ab95a3f34e984d5da469893ba715 *src/check.cpp
-e7af95dfa6d8a8f96a3a091c5d4caeb1 *src/config.h
+abbe185a864d966c436e3aa8efd17ec1 *src/RcppExports.cpp
+39fe33b8ff1b9130e830a0548bc178f8 *src/check.cpp
 09e040f344aa8eae3af6ea7c9df3099e *src/find.cpp
 223b6794afcd37219459c8d130ce8bb0 *src/hunspell/affentry.cc
 5757c96ded3f353f952ab02d0d6bf40e *src/hunspell/affentry.hxx
@@ -29,7 +28,7 @@ a77f4e2b8f2f5d8a9efbc07fae72bbe9 *src/hunspell/affixmgr.hxx
 d9dd32492896cb73a5248eb9a712e864 *src/hunspell/hashmgr.cc
 be3bae922f0511c1ecc81a0bc463a8c5 *src/hunspell/hashmgr.hxx
 2481cd137755e0043b6343accdbf2c8b *src/hunspell/htypes.hxx
-9637d5ce954d864eb2d8b0bee8490348 *src/hunspell/hunspell.cc
+5f62ba515fbf28caad5c032aef7d42d1 *src/hunspell/hunspell.cc
 1c14bccf2864a759f47490d18ebe6b15 *src/hunspell/hunspell.h
 9df16fe13a0c4e34e21f7f7a5844432a *src/hunspell/hunspell.hxx
 977135ad1c84c0da56fa64ffd9b42fba *src/hunspell/hunvisapi.h
@@ -59,7 +58,7 @@ ae9b1319b85a5921e4cf3422be322075 *src/parsers/odfparser.cc
 772afc20e1245d4b598f2f4e4b9d5313 *src/parsers/textparser.hxx
 032e7ad4ce95592f1f5015c6a8f75715 *src/parsers/xmlparser.cc
 108333b15d0f7f38e289a6544c5f36f4 *src/parsers/xmlparser.hxx
-187229cc4ade2756987740cd2629951a *src/utils.h
+9600aa1fe9f17fa5bc3fc73bf733a042 *src/utils.h
 ab477fd3f8e9c98772a3fa2873590ca0 *tests/testdict/ru_RU.aff
 c1de6ed437b9875dae98403e04641bb2 *tests/testdict/ru_RU.dic
 85cd6010f748c90efd86dbe78fbeced4 *tests/testdict/russian-aot.aff
