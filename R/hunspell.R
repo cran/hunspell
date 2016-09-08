@@ -2,10 +2,10 @@
 #'
 #' The \code{\link{hunspell}} function is a high-level wrapper for finding spelling
 #' errors within a text document. It takes a character vector with text (\code{plain},
-#' \code{latex} or \code{man} format), parses out the words and returns a list with
-#' incorrect words for each line. It effectively combines of \code{\link{hunspell_parse}}
-#' with \code{\link{hunspell_check}} in a single step. Other functions in the package
-#' operate on individual words, see details.
+#' \code{latex}, \code{man}, \code{html} or \code{xml} format), parses out the words
+#' and returns a list with incorrect words for each line. It effectively combines
+#' \code{\link{hunspell_parse}} with \code{\link{hunspell_check}} in a single step.
+#' Other functions in the package operate on individual words, see details.
 #'
 #' Hunspell uses a special dictionary format that defines which stems and affixes are
 #' valid in a given language. The \code{\link{hunspell_analyze}} function shows how a
@@ -49,12 +49,12 @@
 #' @rdname hunspell
 #' @aliases hunspell hunspell_find en_stats dicpath
 #' @export en_stats dicpath
+#' @param dict a dictionary object or string which can be passed to \code{\link{dictionary}}.
 #' @param words character vector with individual words to spell check
 #' @param text character vector with arbitrary input text
 #' @param ignore character vector with additional approved words added to the dictionary
 #' @param format input format; supported parsers are \code{text}, \code{latex}, \code{man},
 #' \code{xml} and \code{html}.
-#' @param dict dictionary language, see details
 #' @rdname hunspell
 #' @importFrom Rcpp sourceCpp
 #' @useDynLib hunspell
@@ -90,12 +90,12 @@
 #' stems <- unlist(hunspell_stem(unlist(allwords)))
 #' words <- head(sort(table(stems), decreasing = TRUE), 200)
 hunspell <- function(text, format = c("text", "man", "latex", "html", "xml"),
-                     dict = "en_US", ignore = en_stats){
+                     dict = dictionary("en_US"), ignore = en_stats){
   stopifnot(is.character(text))
   stopifnot(is.character(ignore))
   format <- match.arg(format)
-  dicpath <- get_dict(dict)
-  R_hunspell_find(get_affix(dicpath), dicpath, text, format, ignore)
+  dictionary <- dictionary(dict)
+  R_hunspell_find(dictionary, text, format, ignore)
 }
 
 #for backward compatiblity
@@ -103,50 +103,51 @@ hunspell_find <- hunspell
 
 #' @rdname hunspell
 #' @export
-hunspell_parse <- function(text, format = c("text", "man", "latex", "html", "xml"), dict = "en_US"){
+hunspell_parse <- function(text, format = c("text", "man", "latex", "html", "xml"),
+                           dict = dictionary("en_US")){
   stopifnot(is.character(text))
   format <- match.arg(format)
-  dicpath <- get_dict(dict)
-  R_hunspell_parse(get_affix(dicpath), dicpath, text, format)
+  dictionary <- dictionary(dict)
+  R_hunspell_parse(dictionary, text, format)
 }
 
 #' @rdname hunspell
 #' @export
-hunspell_check <- function(words, dict = "en_US"){
+hunspell_check <- function(words, dict = dictionary("en_US")){
   stopifnot(is.character(words))
-  dicpath <- get_dict(dict)
-  R_hunspell_check(get_affix(dicpath), dicpath, words)
+  dictionary <- dictionary(dict)
+  R_hunspell_check(dictionary, words)
 }
 
 #' @rdname hunspell
 #' @export
-hunspell_suggest <- function(words, dict = "en_US"){
+hunspell_suggest <- function(words, dict = dictionary("en_US")){
   stopifnot(is.character(words))
-  dicpath <- get_dict(dict)
-  R_hunspell_suggest(get_affix(dicpath), dicpath, words)
+  dictionary <- dictionary(dict)
+  R_hunspell_suggest(dictionary, words)
 }
 
 #' @rdname hunspell
 #' @export
-hunspell_analyze <- function(words, dict = "en_US"){
+hunspell_analyze <- function(words, dict = dictionary("en_US")){
   stopifnot(is.character(words))
-  dicpath <- get_dict(dict)
-  R_hunspell_analyze(get_affix(dicpath), dicpath, words)
+  dictionary <- dictionary(dict)
+  R_hunspell_analyze(dictionary, words)
 }
 
 #' @rdname hunspell
 #' @export
-hunspell_stem <- function(words, dict = "en_US"){
+hunspell_stem <- function(words, dict = dictionary("en_US")){
   stopifnot(is.character(words))
-  dicpath <- get_dict(dict)
-  R_hunspell_stem(get_affix(dicpath), dicpath, words)
+  dictionary <- dictionary(dict)
+  R_hunspell_stem(dictionary, words)
 }
 
 #' @rdname hunspell
 #' @export
-hunspell_info <- function(dict = "en_US"){
-  dicpath <- get_dict(dict)
-  info <- R_hunspell_info(get_affix(dicpath), dicpath)
+hunspell_info <- function(dict = dictionary("en_US")){
+  dictionary <- dictionary(dict)
+  info <- R_hunspell_info(dictionary)
   if(length(info$wordchars)){
     wc_enc <- ifelse(info$encoding == "UTF-8", "UTF-16LE", info$encoding)
     wc <- iconv(list(info$wordchars), wc_enc, "UTF-8")
@@ -158,13 +159,26 @@ hunspell_info <- function(dict = "en_US"){
   info
 }
 
+dictionary_internal <- function(lang, affix){
+  dicpath <- get_dict(lang)
+  affix <- if(length(affix)){
+    normalizePath(affix, mustWork = TRUE)
+  } else {
+    get_affix(dicpath)
+  }
+  dict <- R_hunspell_dict(affix, dicpath)
+  structure(dict, class = "dictionary")
+}
+
 get_affix <- function(dicpath){
   normalizePath(sub("\\.dic$", ".aff", dicpath), mustWork = TRUE)
 }
 
 get_dict <- function(dict){
-  dict <- sub("\\.(dic|aff)$", "", dict)
-  normalizePath(find_in_dicpath(paste0(dict, ".dic")), mustWork = TRUE)
+  if(!file.exists(dict)){
+    dict <- find_in_dicpath(paste0(sub("\\.(dic|aff)$", "", dict), ".dic"))
+  }
+  normalizePath(dict, mustWork = TRUE)
 }
 
 dicpath <- function(){
@@ -172,6 +186,9 @@ dicpath <- function(){
    Sys.getenv("DICPATH", getwd()),
    system.file("dict", package = "hunspell"), # Bundled with the R package
    normalizePath("~/Library/Spelling", mustWork = FALSE),
+   "/usr/local/share/hunspell",
+   "/usr/local/share/myspell",
+   "/usr/local/share/myspell/dicts",
    "/usr/share/hunspell",
    "/usr/share/myspell",
    "/usr/share/myspell/dicts",
@@ -196,3 +213,37 @@ en_stats <- (function(){
     return(character(0))
   }
 })()
+
+#' @export
+print.dictionary <- function(x, ...){
+  info <- hunspell_info(x)
+  cat("<hunspell dictionary>\n")
+  cat(" affix:", info$affix, "\n")
+  cat(" dictionary:", info$dict, "\n")
+  cat(" encoding:", info$encoding, "\n")
+  cat(" wordchars:", info$wordchars, "\n")
+  invisible()
+}
+
+#' @export
+#' @rdname hunspell
+#' @param lang dictionary file or language, see details
+#' @param affix file path to corresponding affix file. If \code{NULL} it is
+#' is assumed to be the same path as \code{dict} with extension \code{.aff}.
+#' @param cache speed up loading of dicationaries by caching
+dictionary <- function(lang = "en_US", affix = NULL, cache = TRUE){
+  if(inherits(lang, "dictionary"))
+    return(lang)
+  if(!isTRUE(cache))
+    return(dictionary_internal(lang, affix))
+  key <- digest::digest(list(lang, affix))
+  if(!is.null(store[[key]])){
+    return(store[[key]])
+  } else {
+    val <- dictionary_internal(lang, affix)
+    store[[key]] = val
+    return(val)
+  }
+}
+
+store <- new.env()

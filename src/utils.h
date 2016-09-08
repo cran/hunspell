@@ -9,6 +9,8 @@ class hunspell_dict {
   iconv_t cd_from_;
   iconv_t cd_to_;
   std::string enc_;
+  Rcpp::String affix_;
+  Rcpp::CharacterVector dicts_;
 
 private:
   iconv_t new_iconv(const char * from, const char * to){
@@ -24,7 +26,7 @@ private:
 
 public:
   // Some strings are regular strings
-  hunspell_dict(Rcpp::String affix, Rcpp::CharacterVector dicts){
+  hunspell_dict(Rcpp::String affix, Rcpp::CharacterVector dicts) : affix_(affix), dicts_(dicts) {
     std::string dict(dicts[0]);
     pMS_ = new Hunspell(affix.get_cstring(), dict.c_str());
     if(!pMS_)
@@ -33,7 +35,7 @@ public:
     //add additional dictionaries if more than one
     //assuming the same affix?? This can cause unpredictable behavior
     for(int i = 1; i < dicts.length(); i++)
-      pMS_->add_dic(std::string(dicts[0]).c_str());
+      pMS_->add_dic(std::string(dicts[i]).c_str());
 
     enc_ = pMS_->get_dict_encoding();
     cd_from_ = new_iconv("UTF-8", enc_.c_str());
@@ -88,8 +90,8 @@ public:
   Rcpp::CharacterVector suggest(Rcpp::String word){
     char * str = string_from_r(word);
     Rcpp::CharacterVector out;
-    for (const auto& x : pMS_->suggest(str)) {
-      out.push_back(x);
+    for (const std::basic_string<char>& x : pMS_->suggest(str)) {
+      out.push_back(string_to_r(x.c_str()));
     }
     free(str);
     return out;
@@ -98,8 +100,8 @@ public:
   Rcpp::CharacterVector analyze(Rcpp::String word){
     Rcpp::CharacterVector out;
     char * str = string_from_r(word);
-    for (const auto& x : pMS_->analyze(str)) {
-      out.push_back(x);
+    for (const std::basic_string<char>& x : pMS_->analyze(str)) {
+      out.push_back(string_to_r(x.c_str()));
     }
     free(str);
     return out;
@@ -108,8 +110,8 @@ public:
   Rcpp::CharacterVector stem(Rcpp::String word){
     Rcpp::CharacterVector out;
     char * str = string_from_r(word);
-    for (const auto& x : pMS_->stem(str)) {
-      out.push_back(x);
+    for (const std::basic_string<char>& x : pMS_->stem(str)) {
+      out.push_back(string_to_r(x.c_str()));
     }
     free(str);
     return out;
@@ -132,6 +134,14 @@ public:
 
   std::string wc(){
     return pMS_->get_wordchars();
+  }
+
+  Rcpp::String affix(){
+    return affix_;
+  }
+
+  Rcpp::CharacterVector dicts(){
+    return dicts_;
   }
 
   Rcpp::RawVector r_wordchars(){

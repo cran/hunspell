@@ -1,3 +1,8 @@
+1.5
+  - Dictionaries are now their own class and get cached automatically via memoise
+  - Make sure UTF-8 return values are marked properly. Fixes #16
+  - Update libhunspell to upstream 4b43843
+
 1.4.3
   - Fix UBSAN bug
   - Remove unused 'config.h' file (see upstream 2ccf840)
