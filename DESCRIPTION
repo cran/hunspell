@@ -1,7 +1,7 @@
 Package: hunspell
 Type: Package
 Title: High-Performance Stemmer, Tokenizer, and Spell Checker for R
-Version: 2.0
+Version: 2.1
 Author: Jeroen Ooms
 Maintainer: Jeroen Ooms <jeroen.ooms@stat.ucla.edu>
 Description: A spell checker and morphological analyzer library designed for
@@ -19,6 +19,6 @@ Suggests: testthat, devtools, pdftools, janeaustenr, wordcloud2, knitr,
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1
 NeedsCompilation: yes
-Packaged: 2016-09-08 17:52:14 UTC; jeroen
+Packaged: 2016-10-02 19:13:16 UTC; jeroen
 Repository: CRAN
-Date/Publication: 2016-09-08 21:36:40
+Date/Publication: 2016-10-03 08:17:42

@@ -1,4 +1,9 @@
-1.5
+2.1
+  - Update upstream to a6d32ee
+  - Rebuild vignettes to fix CMD check timestamp warning
+
+2.0
+  - Added a beautiful intro vignette
   - Dictionaries are now their own class and get cached automatically via memoise
   - Make sure UTF-8 return values are marked properly. Fixes #16
   - Update libhunspell to upstream 4b43843

@@ -18,7 +18,7 @@ print(bad[[1]])
 hunspell_suggest(bad[[1]])
 
 ## ------------------------------------------------------------------------
-download.file("http://arxiv.org/e-print/1406.4806v1", "1406.4806v1.tar.gz",  mode = "wb")
+download.file("https://arxiv.org/e-print/1406.4806v1", "1406.4806v1.tar.gz",  mode = "wb")
 untar("1406.4806v1.tar.gz")
 text <- readLines("content.tex", warn = FALSE)
 bad_words <- hunspell(text, format = "latex")
@@ -29,17 +29,18 @@ text <- pdftools::pdf_text('https://www.gnu.org/licenses/quick-guide-gplv3.pdf')
 bad_words <- hunspell(text)
 sort(unique(unlist(bad_words)))
 
+## ---- eval=FALSE---------------------------------------------------------
+#  devtools::spell_check("~/workspace/V8")
+
 ## ------------------------------------------------------------------------
 # Stemming
-words <- c("love", "loving", "lovingly", "loved", "lover", "lovely", "love")
+words <- c("love", "loving", "lovingly", "loved", "lover", "lovely")
 hunspell_stem(words)
 
 ## ------------------------------------------------------------------------
 hunspell_analyze(words)
 
 ## ------------------------------------------------------------------------
-download.file("http://arxiv.org/e-print/1406.4806v1", "1406.4806v1.tar.gz",  mode = "wb")
-untar("1406.4806v1.tar.gz")
 text <- readLines("content.tex", warn = FALSE)
 allwords <- hunspell_parse(text, format = "latex")
 
@@ -68,9 +69,17 @@ wordcloud2(wcdata)
 ## ------------------------------------------------------------------------
 dictionary("en_GB")
 
+## ---- eval = FALSE-------------------------------------------------------
+#  dutch <- dictionary("~/workspace/Dictionaries/Dutch.dic")
+#  print(dutch)
+
 ## ------------------------------------------------------------------------
 hunspell("My favourite colour to visualise is grey")
 hunspell("My favourite colour to visualise is grey", dict = 'en_GB')
+
+## ---- eval = FALSE-------------------------------------------------------
+#  dutch <- dictionary("~/workspace/Dictionaries/Dutch.dic")
+#  hunspell("Hij heeft de klok wel horen luiden, maar weet niet waar de klepel hangt", dict = dutch)
 
 ## ------------------------------------------------------------------------
 Sys.setenv(DICPATH = "/my/custom/hunspell/dir")

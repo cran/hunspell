@@ -1,9 +1,9 @@
-71d4f4d6c788039d9abddcf5df6a37ca *DESCRIPTION
+19f2c15d3f7c302a83393ab7266c432d *DESCRIPTION
 8dbe620f546b5cdf502b8557bac3e02b *LICENSE.note
 577675ffdd5447fc5d4e79d5daf17d51 *NAMESPACE
-ee3a5f9d980227f5a493800520a3a0e6 *NEWS
+3d64b301d38a00858d87f2438eb24a63 *NEWS
 811463f859f40d4a728f1c29ed8797dd *R/RcppExports.R
-a9a64fc4c14e17295550871d1d132f4d *R/hunspell.R
+11435b56b0b3343e6b8c9b7a8a06322b *R/hunspell.R
 101a4244a4a79c1b372191967f6392dc *README.md
 31d66bc20b7470c5724fc7dca5ae21ab *build/vignette.rds
 011cfe10c5b45588bde7632a8599fee5 *inst/dict/README.txt
@@ -11,10 +11,10 @@ e4847b6951de30854b5defc61c2de8c8 *inst/dict/en_GB.aff
 d789542dff8ae84e29e42ee36eba93be *inst/dict/en_GB.dic
 db68a47ab1f1159be17daf5f8800d6c6 *inst/dict/en_US.aff
 58913053800419597839117a985874f6 *inst/dict/en_US.dic
-7851e80128f396a717335f009fd01c8b *inst/doc/intro.R
-bb49f79a4e5902b1eda15428d290f447 *inst/doc/intro.Rmd
-d5897d0de03ff1c2ea6a8646fa1d4b74 *inst/doc/intro.html
-073e32543382155f7b6b062943e63c10 *man/hunspell.Rd
+a50a2296f316dcde38090c51c639316a *inst/doc/intro.R
+c2c803d452addfefd2341103ec12d5b2 *inst/doc/intro.Rmd
+722fb1746fe4fb45d99ed99e213a0f86 *inst/doc/intro.html
+655c548f1afc339b6a06cac73669afb5 *man/hunspell.Rd
 3348434007e5342660f4594dbec563ee *src/Makevars
 ae77065575cf765045e5dfb977060467 *src/RcppExports.cpp
 d83c65b329e391a0cf4d720fca8ee6d3 *src/check.cpp
@@ -43,7 +43,7 @@ d415dc16efab17955f40f6c572775450 *src/hunspell/hunzip.hxx
 4b83f14f8eef462f2608cfcea6d68b5d *src/hunspell/phonet.hxx
 656f2af6d49b4e2fcbc15972e7245241 *src/hunspell/replist.cc
 fb9b5d13309ac922446bf678aba11564 *src/hunspell/replist.hxx
-f285d5e702df9bc49e461707f5bfd75d *src/hunspell/suggestmgr.cc
+a02234e7beb642d0072c2761d8fb6d11 *src/hunspell/suggestmgr.cc
 40b4b3d063b9cab234dbef795137902a *src/hunspell/suggestmgr.hxx
 5f0a206dfba48cab03b119b4906cb66b *src/hunspell/utf_info.cc
 8ba960c1273ca3cc399a18e444d412b3 *src/hunspell/w_char.hxx
@@ -71,4 +71,4 @@ c1de6ed437b9875dae98403e04641bb2 *tests/testdict/ru_RU.dic
 3ae3a1b33ce9700cf75734864c75ed15 *tests/testthat.R
 3dbeb587c035bdbc7c3907a3691398c0 *tests/testthat/test_encodings.R
 48d27986e5484ca502434d968e62e74d *tests/testthat/test_parser.R
-d0c0c6c3a0282af23ba7554d10c8787d *vignettes/intro.Rmd
+c2c803d452addfefd2341103ec12d5b2 *vignettes/intro.Rmd

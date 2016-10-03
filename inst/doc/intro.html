@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2016-09-08" />
+<meta name="date" content="2016-10-02" />
 
 <title>The hunspell package: High-Performance Stemmer, Tokenizer, and Spell Checker for R</title>
 
@@ -226,23 +226,23 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">The hunspell package: High-Performance Stemmer, Tokenizer, and Spell Checker for R</h1>
-<h4 class="date"><em>2016-09-08</em></h4>
+<h4 class="date"><em>2016-10-02</em></h4>
 
 </div>
 
 
 <p>Hunspell is the spell checker library used by LibreOffice, OpenOffice, Mozilla Firefox, Google Chrome, Mac OS-X, InDesign, Opera, RStudio and many others. It provides a system for tokenizing, stemming and spelling in almost any language or alphabet. The R package exposes both the high-level spell-checker as well as low-level stemmers and tokenizers which analyze or extract individual words from various formats (text, html, xml, latex).</p>
-<p>Hunspell uses a special dictionary format that defines which characters, words and conjugations are valid in a given language. The examples below use the (default) <code>&quot;en_US&quot;</code> dictionary. However each function can be used in another language by setting a custom dictionary in the <code>dict</code> parameter. See the section on <a href="#dictionaries">dictionaries</a> below.</p>
+<p>Hunspell uses a special dictionary format that defines which characters, words and conjugations are valid in a given language. The examples below use the (default) <code>&quot;en_US&quot;</code> dictionary. However each function can be used in another language by setting a custom dictionary in the <code>dict</code> parameter. See the section on <a href="#hunspell_dictionaries">dictionaries</a> below.</p>
 <div id="spell-checking" class="section level2">
 <h2>Spell Checking</h2>
-<p>Spell checking rougly consists of the following steps:</p>
+<p>Spell checking text consists of the following steps:</p>
 <ol style="list-style-type: decimal">
-<li>Parse a document by extracting (<strong>tokenizing</strong>) words that we want to spell-check</li>
-<li>Analyze each word by breaking it down in a stem (<strong>stemming</strong>) and conjugation affix</li>
-<li>Lookup in a <strong>dictionary</strong> if the word+affix combo if valid in a given language</li>
-<li>(optional) <strong>suggest</strong> corrections by finding words with a short distance to the incorrect word(s)</li>
+<li>Parse a document by extracting (<strong>tokenizing</strong>) words that we want to check</li>
+<li>Analyze each word by breaking it down in it’s root (<strong>stemming</strong>) and conjugation affix</li>
+<li>Lookup in a <strong>dictionary</strong> if the word+affix combination if valid for your language</li>
+<li>(optional) For incorrect words, <strong>suggest</strong> corrections by finding similar (correct) words in the dictionary</li>
 </ol>
-<p>We can do these steps manually or have Hunspell do them automatically for us.</p>
+<p>We can do each these steps manually or have Hunspell do them automatically.</p>
 <div id="check-individual-words" class="section level3">
 <h3>Check Individual Words</h3>
 <p>The <code>hunspell_check</code> and <code>hunspell_suggest</code> functions can test individual words for correctness, and suggest similar (correct) words that look similar to the given (incorrect) word.</p>
@@ -260,7 +260,7 @@ hunspell_suggest(words[!correct])</code></pre>
 </div>
 <div id="check-documents" class="section level3">
 <h3>Check Documents</h3>
-<p>In practice spell checking is often performed on an entire document. The  function does the typicall spell checking where it searcher for incorrect words within a document.</p>
+<p>In practice we often want to spell check an entire document at once by searching for incorrect words. This is done using the <code>hunspell</code> function:</p>
 <pre class="r"><code>bad &lt;- hunspell(&quot;spell checkers are not neccessairy for langauge ninjas&quot;)
 print(bad[[1]])</code></pre>
 <pre><code>[1] &quot;neccessairy&quot; &quot;langauge&quot;   </code></pre>
@@ -272,8 +272,8 @@ print(bad[[1]])</code></pre>
 [[2]]
 [1] &quot;language&quot;  &quot;Langeland&quot; &quot;Lagrange&quot;  &quot;Lange&quot;     &quot;gaugeable&quot; &quot;linkage&quot;  
 [7] &quot;Langland&quot; </code></pre>
-<p>The <code>hunspell</code> function parses various formats, for example latex:</p>
-<pre class="r"><code>download.file(&quot;http://arxiv.org/e-print/1406.4806v1&quot;, &quot;1406.4806v1.tar.gz&quot;,  mode = &quot;wb&quot;)
+<p>Besides plain text, <code>hunspell</code> supports various document formats, such as html or latex:</p>
+<pre class="r"><code>download.file(&quot;https://arxiv.org/e-print/1406.4806v1&quot;, &quot;1406.4806v1.tar.gz&quot;,  mode = &quot;wb&quot;)
 untar(&quot;1406.4806v1.tar.gz&quot;)
 text &lt;- readLines(&quot;content.tex&quot;, warn = FALSE)
 bad_words &lt;- hunspell(text, format = &quot;latex&quot;)
@@ -309,7 +309,7 @@ sort(unique(unlist(bad_words)))</code></pre>
 </div>
 <div id="check-pdf-files" class="section level3">
 <h3>Check PDF files</h3>
-<p>Use the text-extraction from the <code>pdftools</code> package to extract text from PDF files!</p>
+<p>Use the text-extraction from the <code>pdftools</code> package to spell check text from PDF files!</p>
 <pre class="r"><code>text &lt;- pdftools::pdf_text('https://www.gnu.org/licenses/quick-guide-gplv3.pdf')
 bad_words &lt;- hunspell(text)
 sort(unique(unlist(bad_words)))</code></pre>
@@ -321,7 +321,7 @@ sort(unique(unlist(bad_words)))</code></pre>
 </div>
 <div id="check-manual-pages" class="section level3">
 <h3>Check Manual Pages</h3>
-<p>The <code>devtools</code> package builds on hunspell and has a wrapper to spell-check package documentation files. It shows mostly false positives with non-english R jargon, but you might also catch a typo or two. Point it to the root of your source package:</p>
+<p>The <code>devtools</code> package builds on hunspell and has a wrapper to spell-check manual pages from R packages. Results might contain a lot of false positives for technical jargon, but you might also catch a typo or two. Point it to the root of your source package:</p>
 <pre class="r"><code>devtools::spell_check(&quot;~/workspace/V8&quot;)</code></pre>
 <pre><code>  WORD          FOUND IN
 ECMA          V8.Rd:16, description:2,4
@@ -342,7 +342,7 @@ Yihui         JS.Rd:26</code></pre>
 <h3>Stemming Words</h3>
 <p>The <code>hunspell_stem</code> looks up words from the dictionary which match the root of the given word. Note that the function returns a list because some words can have multiple matches.</p>
 <pre class="r"><code># Stemming
-words &lt;- c(&quot;love&quot;, &quot;loving&quot;, &quot;lovingly&quot;, &quot;loved&quot;, &quot;lover&quot;, &quot;lovely&quot;, &quot;love&quot;)
+words &lt;- c(&quot;love&quot;, &quot;loving&quot;, &quot;lovingly&quot;, &quot;loved&quot;, &quot;lover&quot;, &quot;lovely&quot;)
 hunspell_stem(words)</code></pre>
 <pre><code>[[1]]
 [1] &quot;love&quot;
@@ -360,10 +360,7 @@ hunspell_stem(words)</code></pre>
 [1] &quot;lover&quot; &quot;love&quot; 
 
 [[6]]
-[1] &quot;lovely&quot; &quot;love&quot;  
-
-[[7]]
-[1] &quot;love&quot;</code></pre>
+[1] &quot;lovely&quot; &quot;love&quot;  </code></pre>
 </div>
 <div id="analyzing-words" class="section level3">
 <h3>Analyzing Words</h3>
@@ -385,18 +382,13 @@ hunspell_stem(words)</code></pre>
 [1] &quot; st:lover&quot;     &quot; st:love fl:R&quot;
 
 [[6]]
-[1] &quot; st:lovely&quot;    &quot; st:love fl:Y&quot;
-
-[[7]]
-[1] &quot; st:love&quot;</code></pre>
+[1] &quot; st:lovely&quot;    &quot; st:love fl:Y&quot;</code></pre>
 </div>
 </div>
 <div id="tokenizing" class="section level2">
 <h2>Tokenizing</h2>
 <p>To support spell checking on documents, Hunspell includes parsers for various document formats, including <em>text</em>, <em>html</em>, <em>xml</em>, <em>man</em> or <em>latex</em>. The Hunspell package also exposes these tokenizers directly so they can be used for other application than spell checking.</p>
-<pre class="r"><code>download.file(&quot;http://arxiv.org/e-print/1406.4806v1&quot;, &quot;1406.4806v1.tar.gz&quot;,  mode = &quot;wb&quot;)
-untar(&quot;1406.4806v1.tar.gz&quot;)
-text &lt;- readLines(&quot;content.tex&quot;, warn = FALSE)
+<pre class="r"><code>text &lt;- readLines(&quot;content.tex&quot;, warn = FALSE)
 allwords &lt;- hunspell_parse(text, format = &quot;latex&quot;)
 
 # Third line (title) only
@@ -448,8 +440,8 @@ print(wcdata, max = 40)</code></pre>
 <pre class="r"><code>library(wordcloud2)
 names(wcdata) &lt;- c(&quot;word&quot;, &quot;freq&quot;)
 wordcloud2(wcdata)</code></pre>
-<div id="htmlwidget-bdb8d540341ef674bd19" style="width:672px;height:480px;" class="wordcloud2 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-bdb8d540341ef674bd19">{"x":{"word":["Mr","Elizabeth","Darcy","Mrs","sister","Jane","miss","Miss","lady","It","He","time","aft","happy","Collin","dear","bee","day","friend","Lydia","feel","family","hope","manner","Lady","moth","mother","father","daughter","ply","letter","eve","walk","Catherine","marry","My","alway","love","house","talk","receive","answer","speak","pleasure","hear","Gardiner","Lizzy","attention","deed","cry","subject","till","add","cried","call","oft","suppose","ally","pass","heard","aunt","Charlotte","doe","In","expect","girl","leave","agree","broth","brother","moment","morn","live","morning","evening","sir","word","ill","opine","dance","happiness","mind","reason","surprise","uncle","assure","kitty","Kitty","half","light","Luca","found","party","told","opinion","world","character","eye","follow","smile","colonel","home","marriage","town","hour","left","mention","visit","perfect","acquaintance","pleas","affection","concern","continue","conversation","idea","chapter","express","married","received","settle","woman","cousin","person","agreeable","hard","object","read","short","As","enter","form","means","meet","relate","respect","equal","life","write","dare","London","stay","expected","husband","regard","join","civility","No","engage","minute"],"freq":[786,635,418,343,297,292,290,281,265,247,235,224,200,183,180,178,175,174,174,171,167,159,144,143,137,137,137,135,134,133,132,130,127,126,126,120,119,118,111,111,109,105,103,99,98,97,97,96,95,94,94,93,91,91,89,89,89,88,88,87,85,85,85,85,84,83,82,81,81,81,81,81,79,79,78,78,78,77,76,75,74,73,73,72,72,71,71,71,70,70,70,69,69,69,68,68,67,67,67,67,66,66,66,66,65,65,65,65,64,63,63,62,62,62,62,62,61,61,61,61,61,61,60,60,59,59,59,58,58,57,57,57,57,57,57,57,56,56,56,55,55,55,54,54,54,53,52,52,51,51],"fontFamily":"Segoe UI","fontWeight":"bold","color":"random-dark","minSize":0,"weightFactor":0.229007633587786,"backgroundColor":"white","gridSize":0,"minRotation":-0.785398163397448,"maxRotation":0.785398163397448,"shuffle":true,"rotateRatio":0.4,"shape":"circle","ellipticity":0.65,"figBase64":null,"hover":null},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-1feae81e97de08b62d8d" style="width:672px;height:480px;" class="wordcloud2 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1feae81e97de08b62d8d">{"x":{"word":["Mr","Elizabeth","Darcy","Mrs","sister","Jane","miss","Miss","lady","It","He","time","aft","happy","Collin","dear","bee","day","friend","Lydia","feel","family","hope","manner","Lady","moth","mother","father","daughter","ply","letter","eve","walk","Catherine","marry","My","alway","love","house","talk","receive","answer","speak","pleasure","hear","Gardiner","Lizzy","attention","deed","cry","subject","till","add","cried","call","oft","suppose","ally","pass","heard","aunt","Charlotte","doe","In","expect","girl","leave","agree","broth","brother","moment","morn","live","morning","evening","sir","word","ill","opine","dance","happiness","mind","reason","surprise","uncle","assure","kitty","Kitty","half","light","Luca","found","party","told","opinion","world","character","eye","follow","smile","colonel","home","marriage","town","hour","left","mention","visit","perfect","acquaintance","pleas","affection","concern","continue","conversation","idea","chapter","express","married","received","settle","woman","cousin","person","agreeable","hard","object","read","short","As","enter","form","means","meet","relate","respect","equal","life","write","dare","London","stay","expected","husband","regard","join","civility","No","engage","minute"],"freq":[786,635,418,343,297,292,290,281,265,247,235,224,200,183,180,178,175,174,174,171,167,159,144,143,137,137,137,135,134,133,132,130,127,126,126,120,119,118,111,111,109,105,103,99,98,97,97,96,95,94,94,93,91,91,89,89,89,88,88,87,85,85,85,85,84,83,82,81,81,81,81,81,79,79,78,78,78,77,76,75,74,73,73,72,72,71,71,71,70,70,70,69,69,69,68,68,67,67,67,67,66,66,66,66,65,65,65,65,64,63,63,62,62,62,62,62,61,61,61,61,61,61,60,60,59,59,59,58,58,57,57,57,57,57,57,57,56,56,56,55,55,55,54,54,54,53,52,52,51,51],"fontFamily":"Segoe UI","fontWeight":"bold","color":"random-dark","minSize":0,"weightFactor":0.229007633587786,"backgroundColor":"white","gridSize":0,"minRotation":-0.785398163397448,"maxRotation":0.785398163397448,"shuffle":true,"rotateRatio":0.4,"shape":"circle","ellipticity":0.65,"figBase64":null,"hover":null},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div id="hunspell-dictionaries" class="section level2">
@@ -487,19 +479,17 @@ character(0)</code></pre>
 <p>If you want to use another language you need to make sure that the dictionary is available from your system. The <code>dictionary</code> function is used to read in dictionary.</p>
 <pre class="r"><code>dutch &lt;- dictionary(&quot;~/workspace/Dictionaries/Dutch.dic&quot;)
 hunspell(&quot;Hij heeft de klok wel horen luiden, maar weet niet waar de klepel hangt&quot;, dict = dutch)</code></pre>
-<pre><code>[[1]]
-character(0)</code></pre>
 <p>Note that if the <code>dict</code> argument is a string, it will be passed on to the <code>dictionary</code> function.</p>
 </div>
 <div id="system-dictionaries" class="section level3">
 <h3>System Dictionaries</h3>
-<p>The best way to install dictionaries on Linux is via the system package manager. For example on if you would like to install the Austrian-German dictionary on Debian or Ubuntu you either need the <a href="https://packages.debian.org/testing/hunspell-de-at">hunspell-de-at</a> or <a href="https://packages.debian.org/testing/myspell-de-at">myspell-de-at</a> package:</p>
+<p>The best way to install dictionaries on Linux is via the system package manager. For example on if you would like to install the Austrian-German dictionary on <strong>Debian</strong> or <strong>Ubuntu</strong> you either need the <a href="https://packages.debian.org/testing/hunspell-de-at"><code>hunspell-de-at</code></a> or <a href="https://packages.debian.org/testing/myspell-de-at"><code>myspell-de-at</code></a> package:</p>
 <pre class="sh"><code>sudo apt-get install hunspell-de-at</code></pre>
-<p>On Fedora and CentOS / RHEL all German dialects are included with the <a href="https://apps.fedoraproject.org/packages/hunspell-de">hunspell-de</a> package</p>
+<p>On <strong>Fedora</strong> and <strong>CentOS</strong> / <strong>RHEL</strong> all German dialects are included with the <a href="https://apps.fedoraproject.org/packages/hunspell-de"><code>hunspell-de</code></a> package</p>
 <pre class="sh"><code>sudo yum install hunspell-de</code></pre>
 <p>After installing this you should be able to load the dictionary:</p>
 <pre class="r"><code>dict &lt;- dictionary('de_AT')</code></pre>
-<p>If that didn’t work, double check that the files were installed in the system directory, usually <code>/usr/share/myspell</code> or <code>/usr/share/hunspell</code>.</p>
+<p>If that didn’t work, verify that the dictionary files were installed in one of the system directories (usually <code>/usr/share/myspell</code> or <code>/usr/share/hunspell</code>).</p>
 </div>
 <div id="custom-dictionaries" class="section level3">
 <h3>Custom Dictionaries</h3>
