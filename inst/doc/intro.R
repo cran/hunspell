@@ -19,7 +19,7 @@ hunspell_suggest(bad[[1]])
 
 ## ------------------------------------------------------------------------
 download.file("https://arxiv.org/e-print/1406.4806v1", "1406.4806v1.tar.gz",  mode = "wb")
-untar("1406.4806v1.tar.gz")
+untar("1406.4806v1.tar.gz", "content.tex")
 text <- readLines("content.tex", warn = FALSE)
 bad_words <- hunspell(text, format = "latex")
 sort(unique(unlist(bad_words)))
@@ -84,4 +84,7 @@ hunspell("My favourite colour to visualise is grey", dict = 'en_GB')
 ## ------------------------------------------------------------------------
 Sys.setenv(DICPATH = "/my/custom/hunspell/dir")
 hunspell:::dicpath()
+
+## ---- echo = FALSE, message = FALSE--------------------------------------
+unlink(c("1406.4806v1.tar.gz", "content.tex"))
 
