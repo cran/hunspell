@@ -56,7 +56,7 @@ print(head(words, 30))
 ## ------------------------------------------------------------------------
 df <- as.data.frame(words)
 df$stems <- as.character(df$stems)
-stopwords <- hunspell_parse(readLines('http://jeroenooms.github.io/files/stopwords.txt'))
+stopwords <- hunspell_parse(readLines('https://jeroen.github.io/files/stopwords.txt'))
 stops <- df$stems %in% unlist(stopwords)
 wcdata <- head(df[!stops,], 150)
 print(wcdata, max = 40)

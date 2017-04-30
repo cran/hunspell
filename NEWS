@@ -1,3 +1,8 @@
+2.4
+  - Update libhunspell to upstream v1.6.1
+  - Update maintainer info
+  - Add mandatory symbol registration
+
 2.3
   - Update libhunspell to upstream v1.5.4
   - Change intro.rmd vignette to clean up downloaded files

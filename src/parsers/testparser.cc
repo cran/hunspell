@@ -1,6 +1,8 @@
 /* ***** BEGIN LICENSE BLOCK *****
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *
+ * Copyright (C) 2002-2017 N√©meth L√°szl√≥
+ *
  * The contents of this file are subject to the Mozilla Public License Version
  * 1.1 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,18 +13,13 @@
  * for the specific language governing rights and limitations under the
  * License.
  *
- * The Original Code is Hunspell, based on MySpell.
- *
- * The Initial Developers of the Original Code are
- * Kevin Hendricks (MySpell) and NÈmeth L·szlÛ (Hunspell).
- * Portions created by the Initial Developers are Copyright (C) 2002-2005
- * the Initial Developers. All Rights Reserved.
+ * Hunspell is based on MySpell which is Copyright (C) 2002 Kevin Hendricks.
  *
  * Contributor(s): David Einstein, Davide Prina, Giuseppe Modugno,
- * Gianluca Turconi, Simon Brouwer, Noll J·nos, BÌrÛ ¡rp·d,
- * Goldman EleonÛra, SarlÛs Tam·s, Bencs·th Boldizs·r, Hal·csy PÈter,
- * Dvornik L·szlÛ, Gefferth Andr·s, Nagy Viktor, Varga D·niel, Chris Halls,
- * Rene Engelhard, Bram Moolenaar, Dafydd Jones, Harri Pitk‰nen
+ * Gianluca Turconi, Simon Brouwer, Noll J√°nos, B√≠r√≥ √Årp√°d,
+ * Goldman Eleon√≥ra, Sarl√≥s Tam√°s, Bencs√°th Boldizs√°r, Hal√°csy P√©ter,
+ * Dvornik L√°szl√≥, Gefferth Andr√°s, Nagy Viktor, Varga D√°niel, Chris Halls,
+ * Rene Engelhard, Bram Moolenaar, Dafydd Jones, Harri Pitk√§nen
  *
  * Alternatively, the contents of this file may be used under the terms of
  * either the GNU General Public License Version 2 or later (the "GPL"), or
