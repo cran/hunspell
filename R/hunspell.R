@@ -78,10 +78,10 @@
 #' hunspell_analyze(words)
 #'
 #' # Check an entire latex document
-#' setwd(tempdir())
-#' download.file("https://arxiv.org/e-print/1406.4806v1", "1406.4806v1.tar.gz",  mode = "wb")
-#' untar("1406.4806v1.tar.gz")
-#' text <- readLines("content.tex", warn = FALSE)
+#' tmpfile <- file.path(tempdir(), "1406.4806v1.tar.gz")
+#' download.file("https://arxiv.org/e-print/1406.4806v1", tmpfile,  mode = "wb")
+#' untar(tmpfile, exdir = tempdir())
+#' text <- readLines(file.path(tempdir(), "content.tex"), warn = FALSE)
 #' bad_words <- hunspell(text, format = "latex")
 #' sort(unique(unlist(bad_words)))
 #'
@@ -94,8 +94,8 @@ hunspell <- function(text, format = c("text", "man", "latex", "html", "xml"),
   stopifnot(is.character(text))
   stopifnot(is.character(ignore))
   format <- match.arg(format)
-  dictionary <- dictionary(dict)
-  R_hunspell_find(dictionary, text, format, ignore)
+  dictionary <- dictionary(dict, add_words = ignore)
+  R_hunspell_find(dictionary, text, format, character())
 }
 
 #for backward compatiblity
@@ -167,7 +167,7 @@ dictionary_internal <- function(lang, affix, add_words){
     get_affix(dicpath)
   }
   dict <- R_hunspell_dict(affix, dicpath, as.character(add_words))
-  structure(dict, class = "dictionary")
+  structure(dict, class = "hunspell_dictionary")
 }
 
 get_affix <- function(dicpath){
@@ -215,7 +215,7 @@ en_stats <- (function(){
 })()
 
 #' @export
-print.dictionary <- function(x, ...){
+print.hunspell_dictionary <- function(x, ...){
   info <- hunspell_info(x)
   cat("<hunspell dictionary>\n")
   cat(" affix:", info$affix, "\n")
@@ -233,8 +233,11 @@ print.dictionary <- function(x, ...){
 #' @param cache speed up loading of dicationaries by caching
 #' @param add_words a character vector of additional words to add to the dictionary
 dictionary <- function(lang = "en_US", affix = NULL, cache = TRUE, add_words = NULL){
-  if(inherits(lang, "dictionary"))
-    return(lang)
+  if(inherits(lang, "hunspell_dictionary")){
+    if(!length(add_words))
+      return(lang)
+    lang <- hunspell_info(lang)$dict
+  }
   if(!isTRUE(cache))
     return(dictionary_internal(lang, affix, add_words))
   key <- digest::digest(list(lang, affix, add_words))

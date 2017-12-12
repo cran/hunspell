@@ -1,11 +1,11 @@
-570fba2fa23d35e1666bd104e7ed2e33 *DESCRIPTION
+a89a34e69bb219476aa40b6fef311992 *DESCRIPTION
 8dbe620f546b5cdf502b8557bac3e02b *LICENSE.note
-577675ffdd5447fc5d4e79d5daf17d51 *NAMESPACE
-ca6ed01fe26d43e78b683a70bd3f4e4d *NEWS
+9ca5a841c5bba3a76785c8de3aad658a *NAMESPACE
+2ac25ead7f3dae0b3267f0a43d24ae7e *NEWS
 ffe96472114ad1e69548fb75c6c0e545 *R/RcppExports.R
-ae161829e14af5f2340ab487ea903a37 *R/hunspell.R
+67ce03a6c42b759df298baf9e7beca14 *R/hunspell.R
 ff0bf0059fbdcce3a89900280cacfa61 *README.md
-82f7b2bb0426943824327938202e23bf *build/vignette.rds
+996a5ad65b38c760f8bcf9ec8d23fe5f *build/vignette.rds
 77f6960d570af20335ca5b3e10b10b4d *inst/dict/en_GB.aff
 9ac8f9f83e2e6c4a5acb6c48ef29e31c *inst/dict/en_GB.dic
 eaae9bae63b305440b412a48e1653a26 *inst/dict/en_US.aff
@@ -13,8 +13,8 @@ ecba047c3b6d6b941aa78153959097c0 *inst/dict/en_US.dic
 c44740a2c1976966c88f6cd6ed93e0e9 *inst/dict/readme.txt
 1748ad5e552c4c84af41c7026cb1014e *inst/doc/intro.R
 951470eb2f2413c0a77626b8e6ac99e5 *inst/doc/intro.Rmd
-f6e5b5f151eb65cc75bfd1f5e8a9740b *inst/doc/intro.html
-0b99487b4eece3dc2e3b7b2043b98417 *man/hunspell.Rd
+43f93d01c754f9b09d986ba543f81e52 *inst/doc/intro.html
+0c5c42b6cd4ea421da7663f38a981035 *man/hunspell.Rd
 cdd8916dbade426d3939879e1c6ecbf8 *src/Makevars
 c12a3f79e6f057ef8c19e93ff11a9011 *src/RcppExports.cpp
 c776725ffd3054d1eb932e145c2558b1 *src/check.cpp

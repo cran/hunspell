@@ -1,8 +1,9 @@
 Package: hunspell
 Type: Package
 Title: High-Performance Stemmer, Tokenizer, and Spell Checker for R
-Version: 2.7
+Version: 2.8
 Depends: R (>= 3.0.2)
+Encoding: UTF-8
 Author: Jeroen Ooms
 Maintainer: Jeroen Ooms <jeroen@berkeley.edu>
 Description: A spell checker and morphological analyzer library designed for
@@ -19,8 +20,8 @@ LinkingTo: Rcpp (>= 0.12.12)
 Suggests: testthat, devtools, pdftools, janeaustenr, wordcloud2, knitr,
         rmarkdown
 VignetteBuilder: knitr
-RoxygenNote: 6.0.1
+RoxygenNote: 6.0.1.9000
 NeedsCompilation: yes
-Packaged: 2017-11-01 12:36:33 UTC; jeroen
+Packaged: 2017-12-12 10:32:47 UTC; jeroen
 Repository: CRAN
-Date/Publication: 2017-11-03 12:21:38 UTC
+Date/Publication: 2017-12-12 22:35:06 UTC
