@@ -17,21 +17,14 @@ using namespace Rcpp;
 class LIBHUNSPELL_DLL_EXPORTED hunspell_parser {
   TextParser *parser;
   hunspell_dict *mydict;
-  const w_char* utf16_wc;
-  int utf16_len;
+  std::vector<w_char> wordchars; //should stay in scope!
 
 public:
-  hunspell_parser(hunspell_dict *mydict, std::string format) : mydict(mydict) {
-    /* TO DO: should pass utf16_wc to the parser but this doesn't work
-    const std::vector<w_char> vec_wordchars_utf16 = mydict->get_wordchars_utf16();
-    utf16_len = vec_wordchars_utf16.size();
-    utf16_wc = vec_wordchars_utf16.data();
-    */
-
-    // Workaround parses using the standard character set:
-    utf16_len = 0;
-    utf16_wc = NULL;
+  hunspell_parser(hunspell_dict *mydict, std::string format) : mydict(mydict), wordchars(mydict->get_wordchars_utf16()){
     if(mydict->is_utf8()){
+      // initiate the tokenizer
+      int utf16_len = wordchars.size();
+      const w_char * utf16_wc = wordchars.data();
       if(!format.compare("text")){
         parser = new TextParser(utf16_wc, utf16_len);
       } else if(!format.compare("latex")){
@@ -100,13 +93,10 @@ public:
 };
 
 // [[Rcpp::export]]
-List R_hunspell_find(DictPtr ptr, StringVector text, std::string format, StringVector ignore){
+List R_hunspell_find(DictPtr ptr, StringVector text, std::string format){
 
   //init with affix and at least one dict
-  hunspell_parser p(ptr.get(), format);
-
-  //add ignore words
-  ptr->add_words(ignore);
+  hunspell_parser p(ptr.checked_get(), format);
 
   int len = text.length();
   List out(len);
@@ -120,7 +110,7 @@ List R_hunspell_find(DictPtr ptr, StringVector text, std::string format, StringV
 List R_hunspell_parse(DictPtr ptr, StringVector text, std::string format){
 
   //init with affix and at least one dict
-  hunspell_parser p(ptr.get(), format);
+  hunspell_parser p(ptr.checked_get(), format);
 
   int len = text.length();
   List out(len);

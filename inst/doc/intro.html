@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2017-12-12" />
+<meta name="date" content="2017-12-16" />
 
 <title>The hunspell package: High-Performance Stemmer, Tokenizer, and Spell Checker for R</title>
 
@@ -3684,7 +3684,7 @@ div.tocify {
 
 
 <h1 class="title toc-ignore">The hunspell package: High-Performance Stemmer, Tokenizer, and Spell Checker for R</h1>
-<h4 class="date"><em>2017-12-12</em></h4>
+<h4 class="date"><em>2017-12-16</em></h4>
 
 </div>
 
@@ -3771,15 +3771,14 @@ sort(unique(unlist(bad_words)))</code></pre>
 bad_words &lt;- hunspell(text)
 sort(unique(unlist(bad_words)))</code></pre>
 <pre><code> [1] &quot;AGPLed&quot;        &quot;Affero&quot;        &quot;DRM&quot;           &quot;GPLed&quot;        
- [5] &quot;GPLv&quot;          &quot;ISC&quot;           &quot;OpenSolaris&quot;   &quot;Tivoization&quot;  
- [9] &quot;cryptographic&quot; &quot;fsf&quot;           &quot;isn&quot;           &quot;opments&quot;      
-[13] &quot;tivoization&quot;   &quot;tributing&quot;     &quot;ve&quot;            &quot;wasn&quot;         
-[17] &quot;weren&quot;         &quot;wouldn&quot;       </code></pre>
+ [5] &quot;GPLv&quot;          &quot;ISC&quot;           &quot;OpenSolaris’&quot;  &quot;Tivoization&quot;  
+ [9] &quot;cryptographic&quot; &quot;fsf&quot;           &quot;opments&quot;       &quot;tivoization&quot;  
+[13] &quot;tributing&quot;     &quot;users’&quot;       </code></pre>
 </div>
 <div id="check-manual-pages" class="section level3">
 <h3>Check Manual Pages</h3>
-<p>The <code>devtools</code> package builds on hunspell and has a wrapper to spell-check manual pages from R packages. Results might contain a lot of false positives for technical jargon, but you might also catch a typo or two. Point it to the root of your source package:</p>
-<pre class="r"><code>devtools::spell_check(&quot;~/workspace/V8&quot;)</code></pre>
+<p>The <code>spelling</code> package builds on hunspell and has a wrapper to spell-check manual pages from R packages. Results might contain a lot of false positives for technical jargon, but you might also catch a typo or two. Point it to the root of your source package:</p>
+<pre class="r"><code>spelling::spell_check_package(&quot;~/workspace/V8&quot;)</code></pre>
 <pre><code>  WORD          FOUND IN
 ECMA          V8.Rd:16, description:2,4
 ECMAScript    description:2
@@ -3861,10 +3860,16 @@ stems &lt;- unlist(hunspell_stem(unlist(allwords)))
 words &lt;- sort(table(stems), decreasing = TRUE)
 print(head(words, 30))</code></pre>
 <pre><code>stems
- the   to   of  and    a    i    h    I   in  was  she   it that  not  you 
-4402 4305 3611 3585 3135 2930 2233 2070 1881 1846 1711 1640 1579 1429 1367 
-  he   hi   be  had   Mr  for with  but have   on   at  him   my    s   by 
-1336 1271 1241 1177 1129 1064 1053 1002  938  931  787  764  719  653  636 </code></pre>
+      the        to        of       and         a         i         h 
+     4402      4305      3611      3585      3135      2929      2233 
+        I        in       was       she        it      that       not 
+     2069      1881      1846      1711      1640      1579      1429 
+      you        he        hi        be       had        Mr       for 
+     1366      1336      1271      1241      1177      1129      1064 
+     with       but      have        on        at       him        my 
+     1053      1002       938       931       787       764       719 
+       by Elizabeth 
+      636       635 </code></pre>
 <p>Most of these are stop words. Let’s filter these out:</p>
 <pre class="r"><code>df &lt;- as.data.frame(words)
 df$stems &lt;- as.character(df$stems)
@@ -3874,31 +3879,31 @@ wcdata &lt;- head(df[!stops,], 150)
 print(wcdata, max = 40)</code></pre>
 <pre><code>           stems Freq
 20            Mr 1129
-31     Elizabeth  635
-49         Darcy  418
-64        sister  294
-65          Jane  292
-66          miss  290
-69          Miss  281
-73          lady  265
-77            It  247
-80            He  235
-86          time  224
-88            ha  221
-97           aft  200
-106        happy  183
-108       Collin  180
-109      Collins  180
-111         dear  178
-114          bee  175
-117          day  174
-118       friend  174
+30     Elizabeth  635
+48         Darcy  418
+63        sister  294
+64          Jane  292
+65          miss  290
+68          Miss  281
+72          lady  265
+76            It  247
+79            He  235
+85          time  224
+87            ha  221
+96           aft  200
+105        happy  183
+107      Collins  180
+109         dear  178
+112          bee  175
+115          day  174
+117        Lydia  171
+119         feel  167
  [ reached getOption(&quot;max.print&quot;) -- omitted 130 rows ]</code></pre>
 <pre class="r"><code>library(wordcloud2)
 names(wcdata) &lt;- c(&quot;word&quot;, &quot;freq&quot;)
 wordcloud2(wcdata)</code></pre>
-<div id="htmlwidget-7023c7b9068cd4b1005b" style="width:672px;height:480px;" class="wordcloud2 html-widget"></div>
-<script type="application/json" data-for="htmlwidget-7023c7b9068cd4b1005b">{"x":{"word":["Mr","Elizabeth","Darcy","sister","Jane","miss","Miss","lady","It","He","time","ha","aft","happy","Collin","Collins","dear","bee","day","friend","Lydia","feel","family","hope","manner","Lady","mother","father","daughter","ply","letter","walk","Catherine","marry","real","love","house","talk","receive","A","answer","speak","pleasure","Lizzy","hear","cry","subject","till","add","call","suppose","heard","Charlotte","In","aunt","doe","expect","girl","leave","agree","broth","brother","moment","morn","morning","sir","word","ill","opine","ye","dance","passe","evening","happiness","mind","relate","surprise","uncle","Kitty","assure","kitty","reason","Lucas","attention","half","light","found","party","told","opinion","character","eye","follow","smile","colonel","home","marriage","town","world","hour","left","mention","visit","perfect","acquaintance","live","continue","conversation","idea","chapter","coming","express","married","settle","cousin","person","woman","hard","object","affection","read","short","As","enter","form","meet","life","London","dare","stay","husband","regard","join","No","civility","Sir","engage","equal","minute","observe","understand","carriage","occasion","people","satisfy","advantage","concern","doubt","pride","spirit"],"freq":[1129,635,418,294,292,290,281,265,247,235,224,221,200,183,180,180,178,175,174,174,171,167,159,144,143,137,137,135,134,133,132,127,126,126,119,118,111,111,109,106,105,103,99,97,97,94,94,93,91,89,89,87,85,85,85,85,84,83,82,81,81,81,81,81,79,78,78,77,76,76,75,75,74,74,73,73,72,72,71,71,71,71,70,70,70,70,69,69,69,68,67,67,67,67,66,66,66,66,66,65,65,65,65,64,63,63,62,62,62,61,61,61,61,61,60,60,60,59,59,58,58,58,57,57,57,57,56,55,55,55,54,54,53,52,52,51,51,51,51,51,51,50,50,50,50,49,49,49,49,49],"fontFamily":"Segoe UI","fontWeight":"bold","color":"random-dark","minSize":0,"weightFactor":0.159433126660762,"backgroundColor":"white","gridSize":0,"minRotation":-0.785398163397448,"maxRotation":0.785398163397448,"shuffle":true,"rotateRatio":0.4,"shape":"circle","ellipticity":0.65,"figBase64":null,"hover":null},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-561f256938cd6e4ad6fd" style="width:672px;height:480px;" class="wordcloud2 html-widget"></div>
+<script type="application/json" data-for="htmlwidget-561f256938cd6e4ad6fd">{"x":{"word":["Mr","Elizabeth","Darcy","sister","Jane","miss","Miss","lady","It","He","time","ha","aft","happy","Collins","dear","bee","day","Lydia","feel","friend","family","Collin","hope","manner","Lady","mother","father","daughter","ply","letter","walk","Catherine","marry","real","love","house","talk","receive","A","answer","speak","pleasure","Lizzy","hear","cry","subject","till","add","call","suppose","heard","Charlotte","In","aunt","doe","expect","girl","leave","agree","brother","moment","morn","morning","sir","word","ill","opine","ye","dance","passe","evening","happiness","mind","relate","surprise","uncle","Kitty","assure","kitty","reason","Lucas","attention","half","light","found","party","told","broth","opinion","character","eye","follow","smile","colonel","home","marriage","town","world","hour","left","mention","visit","perfect","acquaintance","live","continue","conversation","idea","chapter","coming","express","married","settle","cousin","person","woman","hard","object","affection","read","short","As","enter","form","meet","life","London","dare","stay","husband","regard","join","No","civility","Sir","engage","equal","minute","observe","understand","carriage","occasion","people","satisfy","advantage","concern","doubt","pride","spirit"],"freq":[1129,635,418,294,292,290,281,265,247,235,224,221,200,183,180,178,175,174,171,167,166,159,156,144,143,137,137,135,134,133,132,127,126,126,119,118,111,111,109,106,105,103,99,97,97,94,94,93,91,89,89,87,85,85,85,85,84,83,82,81,81,81,79,79,78,78,77,76,76,75,75,74,74,73,73,72,72,71,71,71,71,70,70,70,70,69,69,69,68,68,67,67,67,67,66,66,66,66,66,65,65,65,65,64,63,63,62,62,62,61,61,61,61,61,60,60,60,59,59,58,58,58,57,57,57,57,56,55,55,55,54,54,53,52,52,51,51,51,51,51,51,50,50,50,50,49,49,49,49,49],"fontFamily":"Segoe UI","fontWeight":"bold","color":"random-dark","minSize":0,"weightFactor":0.159433126660762,"backgroundColor":"white","gridSize":0,"minRotation":-0.785398163397448,"maxRotation":0.785398163397448,"shuffle":true,"rotateRatio":0.4,"shape":"circle","ellipticity":0.65,"figBase64":null,"hover":null},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 <div id="hunspell-dictionaries" class="section level2">
@@ -3906,16 +3911,17 @@ wordcloud2(wcdata)</code></pre>
 <p>Hunspell is based on MySpell and is backward-compatible with MySpell and aspell dictionaries. Chances are your dictionaries in your language are already available on your system!</p>
 <p>A Hunspell dictionary consists of two files:</p>
 <ul>
-<li>The <strong>[lang].aff</strong> file specifies the affix syntax for the language</li>
-<li>The <strong>[lang].dic</strong> file contains a wordlist formatted using syntax from the aff file.</li>
+<li>The <code>[lang].aff</code> file specifies the affix syntax for the language</li>
+<li>The <code>[lang].dic</code> file contains a wordlist formatted using syntax from the aff file.</li>
 </ul>
 <p>Typically both files are located in the same directory and share the same filename, for example <code>en_GB.aff</code> and <code>en_GB.dic</code>. The <code>dictionary</code> function will search for these files in the current directory and standard system paths where dictionaries are usually installed.</p>
 <pre class="r"><code>dictionary(&quot;en_GB&quot;)</code></pre>
 <pre><code>&lt;hunspell dictionary&gt;
- affix: /private/var/folders/l8/bhmtp25n2lx0q0dgv1x4gf1w0000gn/T/RtmpYGfz6N/Rinst8b2079ce4910/hunspell/dict/en_GB.aff 
- dictionary: /private/var/folders/l8/bhmtp25n2lx0q0dgv1x4gf1w0000gn/T/RtmpYGfz6N/Rinst8b2079ce4910/hunspell/dict/en_GB.dic 
+ affix: /private/var/folders/l8/bhmtp25n2lx0q0dgv1x4gf1w0000gn/T/Rtmpon621w/Rinst22761fd6787a/hunspell/dict/en_GB.aff 
+ dictionary: /private/var/folders/l8/bhmtp25n2lx0q0dgv1x4gf1w0000gn/T/Rtmpon621w/Rinst22761fd6787a/hunspell/dict/en_GB.dic 
  encoding: UTF-8 
- wordchars: 0123456789’ </code></pre>
+ wordchars: ’ 
+ added: 0 custom words</code></pre>
 <p>If the files are not in one of the standard paths you can also specify the full path to either or both the dic and aff file:</p>
 <pre class="r"><code>dutch &lt;- dictionary(&quot;~/workspace/Dictionaries/Dutch.dic&quot;)
 print(dutch)</code></pre>
@@ -3962,7 +3968,7 @@ hunspell(&quot;Hij heeft de klok wel horen luiden, maar weet niet waar de klepel
 <pre class="r"><code>Sys.setenv(DICPATH = &quot;/my/custom/hunspell/dir&quot;)
 hunspell:::dicpath()</code></pre>
 <pre><code> [1] &quot;/my/custom/hunspell/dir&quot;                                                                            
- [2] &quot;/private/var/folders/l8/bhmtp25n2lx0q0dgv1x4gf1w0000gn/T/RtmpYGfz6N/Rinst8b2079ce4910/hunspell/dict&quot;
+ [2] &quot;/private/var/folders/l8/bhmtp25n2lx0q0dgv1x4gf1w0000gn/T/Rtmpon621w/Rinst22761fd6787a/hunspell/dict&quot;
  [3] &quot;/Users/jeroen/Library/Spelling&quot;                                                                     
  [4] &quot;/usr/local/share/hunspell&quot;                                                                          
  [5] &quot;/usr/local/share/myspell&quot;                                                                           
@@ -3971,7 +3977,7 @@ hunspell:::dicpath()</code></pre>
  [8] &quot;/usr/share/myspell&quot;                                                                                 
  [9] &quot;/usr/share/myspell/dicts&quot;                                                                           
 [10] &quot;/Library/Spelling&quot;                                                                                  
-[11] &quot;/Applications/RStudio.app/Contents/Resources/resources/dictionaries&quot;                                </code></pre>
+[11] &quot;/dictionaries&quot;                                                                                      </code></pre>
 </div>
 </div>
 
