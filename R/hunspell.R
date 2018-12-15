@@ -24,7 +24,8 @@
 #' \code{\link[utils:aspell]{?aspell}}.
 #'
 #' The package searches for dictionaries in the working directory as well as in the
-#' standard system locations. Additional search paths can be specified by setting
+#' standard system locations. \code{\link{list_dictionaries}} provides a list of all
+#' dictionaries it can find. Additional search paths can be specified by setting
 #' the \code{DICPATH} environment variable. A US English dictionary (\code{en_US}) is
 #' included with the package; other dictionaries need to be installed by the system.
 #' Most operating systems already include compatible dictionaries with names such as
@@ -166,7 +167,8 @@ dictionary_load <- function(lang, affix, add_words, cache){
   } else {
     get_affix(dict)
   }
-  add_words <- as.character(add_words)
+  # Workaround for https://github.com/hunspell/hunspell/issues/616
+  add_words <- chartr("\u2019", "'", as.character(add_words))
   if(!isTRUE(cache))
     return(dictionary_new(dict, affix, add_words))
   key <- digest::digest(list(dict, affix, add_words))
@@ -191,6 +193,22 @@ get_dict <- function(dict){
   normalizePath(dict, mustWork = TRUE)
 }
 
+rstudio_dicpaths <- function(){
+  paths <- file.path(dirname(Sys.getenv("RMARKDOWN_MATHJAX_PATH")), "dictionaries")
+  subdirs <- c('languages-system', 'languages-user')
+  if(.Platform$OS.type == 'windows'){
+    paths <- c(paths, file.path(Sys.getenv('localappdata'), 'RStudio-Desktop', 'dictionaries', subdirs))
+  } else {
+    if(file.exists('~/.rstudio-desktop')){
+      paths <- c(paths, file.path('~/.rstudio-desktop', 'dictionaries', subdirs))
+    }
+    if(file.exists('~/.rstudio')){
+      paths <- c(paths, file.path('~/.rstudio', 'dictionaries', subdirs))
+    }
+  }
+  return(paths)
+}
+
 dicpath <- function(){
   c(
    Sys.getenv("DICPATH", getwd()),
@@ -203,7 +221,7 @@ dicpath <- function(){
    "/usr/share/myspell",
    "/usr/share/myspell/dicts",
    "/Library/Spelling",
-   file.path(dirname(Sys.getenv("RMARKDOWN_MATHJAX_PATH")), "dictionaries") #Rstudio
+   rstudio_dicpaths()
   )
 }
 
@@ -257,3 +275,13 @@ dictionary <- function(lang = "en_US", affix = NULL, add_words = NULL, cache = T
 }
 
 store <- new.env()
+
+#' @export
+#' @rdname hunspell
+list_dictionaries <- function() {
+  dic_file <- list.files(dicpath(), pattern = "\\.dic$")
+  aff_file <- list.files(dicpath(), pattern = "\\.aff$")
+  dic_name <- substr(dic_file, 1 , nchar(dic_file) - 4)
+  aff_name <- substr(aff_file, 1 , nchar(aff_file) - 4)
+  return(intersect(dic_name, aff_name))
+}
