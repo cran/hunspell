@@ -37,7 +37,7 @@
 #' Alternatively you can pass the entire path to the \code{.dic} file as the \code{dict}
 #' parameter. Some popular sources of dictionaries are
 #' \href{http://wordlist.aspell.net/dicts/}{SCOWL},
-#' \href{http://ftp.snt.utwente.nl/pub/software/openoffice/contrib/dictionaries/}{OpenOffice},
+#' \href{http://openoffice.cs.utah.edu/contrib/dictionaries/}{OpenOffice},
 #' \href{http://archive.ubuntu.com/ubuntu/pool/main/libr/libreoffice-dictionaries/?C=S;O=D}{debian},
 #' \href{https://github.com/titoBouzout/Dictionaries}{github/titoBouzout} or
 #' \href{https://github.com/wooorm/dictionaries}{github/wooorm}.
@@ -196,9 +196,27 @@ get_dict <- function(dict){
 rstudio_dicpaths <- function(){
   paths <- file.path(dirname(Sys.getenv("RMARKDOWN_MATHJAX_PATH")), "dictionaries")
   subdirs <- c('languages-system', 'languages-user')
+  # Custom paths in RStudio 1.3, 1.4 or later
+  config_dir <- Sys.getenv("XDG_CONFIG_DIRS") # Scope: system
+  config_dir <- Sys.getenv("XDG_CONFIG_HOME", unset = config_dir) # Scope: user
+  config_dir <- Sys.getenv("RSTUDIO_CONFIG_DIR", unset = config_dir) # Scope: system
+  config_dir <- Sys.getenv("RSTUDIO_CONFIG_HOME", unset = config_dir) # Scope: user
+  if(file.exists(config_dir)){
+    paths <- c(paths, file.path(config_dir, 'dictionaries', subdirs))
+  }
+  # Default paths
   if(.Platform$OS.type == 'windows'){
-    paths <- c(paths, file.path(Sys.getenv('localappdata'), 'RStudio-Desktop', 'dictionaries', subdirs))
+    paths_win <- c(
+      # For RStudio 1.3 or later
+      file.path(Sys.getenv('appdata'), 'RStudio', 'dictionaries', subdirs),
+      # For RStudio 1.2 or earlier
+      file.path(Sys.getenv('localappdata'), 'RStudio-Desktop', 'dictionaries', subdirs)
+    )
+    paths <- c(paths, paths_win)
   } else {
+    if(file.exists('~/.config/rstudio/dictionaries')){
+      paths <- c(paths, file.path('~/.config', 'rstudio', 'dictionaries', subdirs))
+    }
     if(file.exists('~/.rstudio-desktop')){
       paths <- c(paths, file.path('~/.rstudio-desktop', 'dictionaries', subdirs))
     }
