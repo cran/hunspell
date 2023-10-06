@@ -1,4 +1,4 @@
-## ---- echo = FALSE, message = FALSE-------------------------------------------
+## ----echo = FALSE, message = FALSE--------------------------------------------
 knitr::opts_chunk$set(comment = "")
 NOT_CRAN = isTRUE(nchar(Sys.getenv('NOT_CRAN')) || (Sys.getenv('USER') == 'jeroen'))
 
@@ -25,12 +25,12 @@ text <- readLines("content.tex", warn = FALSE)
 bad_words <- hunspell(text, format = "latex")
 sort(unique(unlist(bad_words)))
 
-## ---- eval = require('pdftools')----------------------------------------------
+## ----eval = require('pdftools')-----------------------------------------------
 text <- pdftools::pdf_text('https://www.gnu.org/licenses/quick-guide-gplv3.pdf')
 bad_words <- hunspell(text)
 sort(unique(unlist(bad_words)))
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  spelling::spell_check_package("~/workspace/V8")
 
 ## -----------------------------------------------------------------------------
@@ -61,7 +61,7 @@ stops <- df$stems %in% stopwords::stopwords(source="stopwords-iso")
 wcdata <- head(df[!stops,], 150)
 print(wcdata, max = 40)
 
-## ---- eval = NOT_CRAN---------------------------------------------------------
+## ----eval = NOT_CRAN----------------------------------------------------------
 library(wordcloud2)
 names(wcdata) <- c("word", "freq")
 wcdata$freq <- (wcdata$freq)^(2/3)
@@ -73,7 +73,7 @@ list_dictionaries()
 ## -----------------------------------------------------------------------------
 dictionary("en_GB")
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  dutch <- dictionary("~/workspace/Dictionaries/Dutch.dic")
 #  print(dutch)
 
@@ -81,7 +81,7 @@ dictionary("en_GB")
 hunspell("My favourite colour to visualise is grey")
 hunspell("My favourite colour to visualise is grey", dict = 'en_GB')
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  dutch <- dictionary("~/workspace/Dictionaries/Dutch.dic")
 #  hunspell("Hij heeft de klok wel horen luiden, maar weet niet waar de klepel hangt", dict = dutch)
 
@@ -89,6 +89,6 @@ hunspell("My favourite colour to visualise is grey", dict = 'en_GB')
 Sys.setenv(DICPATH = "/my/custom/hunspell/dir")
 hunspell:::dicpath()
 
-## ---- echo = FALSE, message = FALSE-------------------------------------------
+## ----echo = FALSE, message = FALSE--------------------------------------------
 unlink(c("1406.4806v1.tar.gz", "content.tex"))
 
