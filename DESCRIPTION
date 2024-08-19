@@ -1,7 +1,7 @@
 Package: hunspell
 Type: Package
 Title: High-Performance Stemmer, Tokenizer, and Spell Checker
-Version: 3.0.3
+Version: 3.0.4
 Depends: R (>= 3.0.2)
 Encoding: UTF-8
 Authors@R: c(
@@ -19,15 +19,14 @@ URL: https://docs.ropensci.org/hunspell/
 BugReports: https://github.com/ropensci/hunspell/issues
 Imports: Rcpp, digest
 LinkingTo: Rcpp (>= 0.12.12)
-Suggests: spelling, testthat, pdftools, janeaustenr, wordcloud2, knitr,
-        stopwords, rmarkdown
+Suggests: spelling, testthat, knitr, rmarkdown
 VignetteBuilder: knitr
 RoxygenNote: 7.2.3
 Language: en-US
 NeedsCompilation: yes
-Packaged: 2023-10-06 05:41:03 UTC; jeroen
+Packaged: 2024-08-16 09:32:04 UTC; jeroen
 Author: Jeroen Ooms [aut, cre],
   Authors of libhunspell [cph] (see AUTHORS file)
 Maintainer: Jeroen Ooms <jeroen@berkeley.edu>
 Repository: CRAN
-Date/Publication: 2023-10-06 07:10:02 UTC
+Date/Publication: 2024-08-19 10:40:04 UTC

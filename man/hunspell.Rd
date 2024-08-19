@@ -102,7 +102,7 @@ file to \code{~/Library/Spelling} or a custom directory specified in \code{DICPA
 Alternatively you can pass the entire path to the \code{.dic} file as the \code{dict}
 parameter. Some popular sources of dictionaries are
 \href{http://wordlist.aspell.net/dicts/}{SCOWL},
-\href{http://openoffice.cs.utah.edu/contrib/dictionaries/}{OpenOffice},
+\href{https://www.mirrorservice.org/sites/download.openoffice.org/contrib/dictionaries/}{OpenOffice},
 \href{http://archive.ubuntu.com/ubuntu/pool/main/libr/libreoffice-dictionaries/?C=S;O=D}{debian},
 \href{https://github.com/titoBouzout/Dictionaries}{github/titoBouzout} or
 \href{https://github.com/wooorm/dictionaries}{github/wooorm}.
@@ -131,6 +131,7 @@ words <- c("love", "loving", "lovingly", "loved", "lover", "lovely", "love")
 hunspell_stem(words)
 hunspell_analyze(words)
 
+\donttest{
 # Check an entire latex document
 tmpfile <- file.path(tempdir(), "1406.4806v1.tar.gz")
 download.file("https://arxiv.org/e-print/1406.4806v1", tmpfile,  mode = "wb")
@@ -143,4 +144,5 @@ sort(unique(unlist(bad_words)))
 allwords <- hunspell_parse(text, format = "latex")
 stems <- unlist(hunspell_stem(unlist(allwords)))
 words <- head(sort(table(stems), decreasing = TRUE), 200)
+}
 }
