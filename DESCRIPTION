@@ -1,11 +1,11 @@
 Package: hunspell
 Type: Package
 Title: High-Performance Stemmer, Tokenizer, and Spell Checker
-Version: 3.0.4
+Version: 3.0.5
 Depends: R (>= 3.0.2)
 Encoding: UTF-8
 Authors@R: c(
-    person("Jeroen", "Ooms", ,"jeroen@berkeley.edu", role = c("aut", "cre")),
+    person("Jeroen", "Ooms", ,"jeroenooms@gmail.com", role = c("aut", "cre")),
     person("Authors of libhunspell", role = "cph", comment = "see AUTHORS file"))
 Description: Low level spell checker and morphological analyzer based on the 
     famous 'hunspell' library <https://hunspell.github.io>. The package can analyze
@@ -24,9 +24,9 @@ VignetteBuilder: knitr
 RoxygenNote: 7.2.3
 Language: en-US
 NeedsCompilation: yes
-Packaged: 2024-08-16 09:32:04 UTC; jeroen
+Packaged: 2024-10-03 14:12:49 UTC; jeroen
 Author: Jeroen Ooms [aut, cre],
   Authors of libhunspell [cph] (see AUTHORS file)
-Maintainer: Jeroen Ooms <jeroen@berkeley.edu>
+Maintainer: Jeroen Ooms <jeroenooms@gmail.com>
 Repository: CRAN
-Date/Publication: 2024-08-19 10:40:04 UTC
+Date/Publication: 2024-10-04 12:30:02 UTC
