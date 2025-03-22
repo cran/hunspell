@@ -1,10 +1,10 @@
-5898e5fe0987ff0272fd61ff7442150c *DESCRIPTION
+0b107b13954a5786921ad3b8cbf48f5e *DESCRIPTION
 8dbe620f546b5cdf502b8557bac3e02b *LICENSE.note
 995830aa04a39ab7e3eaffd9c146085e *NAMESPACE
 17840e6317c8853b4a42830681c32ac4 *NEWS
 f9d17e2f17169bee56aa900bd56f919f *R/RcppExports.R
 9f7fb7c5a288c1b7576a4e6149e22be0 *R/hunspell.R
-9301b897e55b4c242d30bbb8553d37a3 *build/vignette.rds
+7f90d9ca350177a8fa568313df5fd68a *build/vignette.rds
 cebfe05051ecc84d32e96262a9b3a78b *inst/AUTHORS
 1a9d7e49642dd8613d1e3c9511dabd62 *inst/WORDLIST
 26fcfb79a3592926a4c50111cd94c3b4 *inst/dict/en_GB.aff
@@ -15,7 +15,7 @@ fe5777f3089bd7ecadb398cef920ff98 *inst/dict/en_US.aff
 2f9eb31b09bc22efe59ef356d02d37c2 *inst/doc/intro.Rmd
 b631346dd63337b666b8be4eeb314419 *inst/doc/intro.html
 962b1d7e42dab11cd8a6952a464cb140 *man/hunspell.Rd
-3666c7366565c22dd5ba414e82aa63bb *src/Makevars
+2f79840293487b6d88c90a05a6cc62fe *src/Makevars
 3362ab22c7cd5feb183d00a5c5b6029a *src/RcppExports.cpp
 c223d35fccade7000f192bfecbf82bc2 *src/dictionary.cpp
 46cf2f87378641ffc050f6d1c4871b99 *src/dictionary.h

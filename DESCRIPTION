@@ -1,7 +1,7 @@
 Package: hunspell
 Type: Package
 Title: High-Performance Stemmer, Tokenizer, and Spell Checker
-Version: 3.0.5
+Version: 3.0.6
 Depends: R (>= 3.0.2)
 Encoding: UTF-8
 Authors@R: c(
@@ -24,9 +24,9 @@ VignetteBuilder: knitr
 RoxygenNote: 7.2.3
 Language: en-US
 NeedsCompilation: yes
-Packaged: 2024-10-03 14:12:49 UTC; jeroen
+Packaged: 2025-03-22 20:15:55 UTC; jeroen
 Author: Jeroen Ooms [aut, cre],
   Authors of libhunspell [cph] (see AUTHORS file)
 Maintainer: Jeroen Ooms <jeroenooms@gmail.com>
 Repository: CRAN
-Date/Publication: 2024-10-04 12:30:02 UTC
+Date/Publication: 2025-03-22 20:50:02 UTC
